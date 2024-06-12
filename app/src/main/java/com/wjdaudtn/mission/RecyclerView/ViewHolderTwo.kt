@@ -3,17 +3,14 @@ package com.wjdaudtn.mission.RecyclerView
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.wjdaudtn.mission.R
 import com.wjdaudtn.mission.databinding.ActivityViewHolderTwoBinding
 import com.wjdaudtn.mission.databinding.ItemMainBinding
 import com.wjdaudtn.mission.databinding.ItemSubBinding
+
 
 class ViewHolderTwo : AppCompatActivity() {
     lateinit var binding: ActivityViewHolderTwoBinding

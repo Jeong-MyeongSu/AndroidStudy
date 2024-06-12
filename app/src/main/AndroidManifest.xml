@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Mission"
         tools:targetApi="31">
         <activity
+            android:name=".Todo.AddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Todo.TodoMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".RecyclerView.ViewHolderTwo"
             android:exported="false" />
         <activity
