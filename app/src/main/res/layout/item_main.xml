@@ -4,12 +4,11 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/purple_500">
-
+    android:background="@color/low_gray">
     <TextView
         android:padding="10dp"
         android:id="@+id/item_main_data"
-        android:gravity="center"
+        android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="22sp"
