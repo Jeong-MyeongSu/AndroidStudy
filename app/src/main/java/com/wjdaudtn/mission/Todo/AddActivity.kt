@@ -1,21 +1,52 @@
 package com.wjdaudtn.mission.Todo
 
+import android.app.Activity
 import android.os.Bundle
+import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.wjdaudtn.mission.R
+import com.wjdaudtn.mission.databinding.ActivityAddBinding
 
 class AddActivity : AppCompatActivity() {
+    lateinit var binding: ActivityAddBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_add)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        binding = ActivityAddBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.btnSave.setOnClickListener(customClickListener)
+        binding.btnBackTodo.setOnClickListener(customClickListener)
+        onBackPressedDispatcher.addCallback(this,onBackPressedCallback)
+
+    }
+
+    private val customClickListener: View.OnClickListener = (object :View.OnClickListener{
+        override fun onClick(v: View?) {
+            if (v != null) {
+                when(v.id){
+                    R.id.btn_save -> {
+                        val intent = intent
+                        intent.putExtra("result_title", binding.editTextTitleAdd.text.toString())
+                        intent.putExtra("result_content", binding.editTextContentAdd.text.toString())
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
+                    }
+                    R.id.btn_back_todo -> {
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
+                    }
+                }
+            }
+        }
+    })
+    private val onBackPressedCallback = object : OnBackPressedCallback(true){
+        override fun handleOnBackPressed() {
+            setResult(Activity.RESULT_OK, intent)
+            finish()
         }
     }
 }
