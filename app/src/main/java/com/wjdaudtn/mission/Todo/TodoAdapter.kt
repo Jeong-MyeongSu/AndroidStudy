@@ -4,6 +4,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wjdaudtn.mission.databinding.ItemMainBinding
 
+class TodoViewHolder(val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root)
+
 //class TodoAdapter(val binding: ItemMainBinding):
 //        RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
