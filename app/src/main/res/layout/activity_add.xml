@@ -57,8 +57,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:textSize="@dimen/sm"
-        tools:text="test"
-        android:textColor="@color/high_gray" />
+        android:hint="제목을 입력하세요."
+        android:textColor="@color/high_gray"/>
     <TextView
         android:id="@+id/content_add"
         android:layout_width="wrap_content"
@@ -75,9 +75,10 @@
         android:layout_marginStart="10dp"
         android:textColor="@color/high_gray"
         android:textSize="@dimen/sm"
+        android:hint="내용을 입력하세요."
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content_add"
-        tools:text="test" />
+   />
 
     <Button
         android:id="@+id/btn_save"

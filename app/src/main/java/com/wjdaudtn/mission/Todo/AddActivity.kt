@@ -16,7 +16,11 @@ class AddActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
+
+        binding.editTextTitleAdd.setText(intent.getStringExtra("title"))
+        binding.editTextContentAdd.setText(intent.getStringExtra("content"))
 
         binding.btnSave.setOnClickListener(customClickListener)
         binding.btnBackTodo.setOnClickListener(customClickListener)
@@ -26,12 +30,14 @@ class AddActivity : AppCompatActivity() {
 
     private val customClickListener: View.OnClickListener = (object :View.OnClickListener{
         override fun onClick(v: View?) {
+            val position = intent.getIntExtra("position", -1)
             if (v != null) {
                 when(v.id){
                     R.id.btn_save -> {
                         val intent = intent
                         intent.putExtra("result_title", binding.editTextTitleAdd.text.toString())
                         intent.putExtra("result_content", binding.editTextContentAdd.text.toString())
+                        intent.putExtra("position",position)
                         setResult(Activity.RESULT_OK, intent)
                         finish()
                     }
