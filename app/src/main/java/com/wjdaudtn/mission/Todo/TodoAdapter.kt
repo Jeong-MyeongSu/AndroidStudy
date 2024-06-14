@@ -13,9 +13,8 @@ import com.wjdaudtn.mission.databinding.ItemMainBinding
 
 class TodoViewHolder(val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root)
 
-class TodoAdapter(var datas: MutableList<TodoMainActivity.Text>?, val requestLauncher: ActivityResultLauncher<Intent>) :
+class TodoAdapter(var datas: MutableList<TodoMainActivity.Text>?, val requestLauncher: ActivityResultLauncher<Intent>, var mTodoDao: TodoDao) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return TodoViewHolder(
             ItemMainBinding.inflate(
@@ -28,7 +27,6 @@ class TodoAdapter(var datas: MutableList<TodoMainActivity.Text>?, val requestLau
     override fun getItemCount(): Int {
         return datas?.size ?: 0
     }
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as TodoViewHolder).binding
         datas?.let {
@@ -55,6 +53,10 @@ class TodoAdapter(var datas: MutableList<TodoMainActivity.Text>?, val requestLau
                     true
                 }
                 R.id.item_delete ->{
+                    val todo = Todo().apply {
+                        index = position+1 // setId(2)와 같은 역할을 합니다.
+                    }
+                    mTodoDao.setDeleteTodo(todo)
                     datas?.removeAt(position)
                     notifyItemRemoved(position)
                     true
