@@ -25,9 +25,7 @@ class AddActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener(customClickListener)
         binding.btnBackTodo.setOnClickListener(customClickListener)
         onBackPressedDispatcher.addCallback(this,onBackPressedCallback)
-
     }
-
     private val customClickListener: View.OnClickListener = (object :View.OnClickListener{
         override fun onClick(v: View?) {
             val position = intent.getIntExtra("position", -1)
@@ -38,6 +36,7 @@ class AddActivity : AppCompatActivity() {
                         intent.putExtra("result_title", binding.editTextTitleAdd.text.toString())
                         intent.putExtra("result_content", binding.editTextContentAdd.text.toString())
                         intent.putExtra("position",position)
+
                         setResult(Activity.RESULT_OK, intent)
                         finish()
                     }
