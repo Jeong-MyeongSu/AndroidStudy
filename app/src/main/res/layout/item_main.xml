@@ -24,6 +24,8 @@
         android:textSize="@dimen/md"
         android:textColor="@color/high_gray"
         android:textStyle="bold"
-        tools:text="testdfdfdff"/>
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="testdfdfdffdfdfdffdfdfdfdfdfd123123123123fdfdfdf"/>
 
 </LinearLayout>
