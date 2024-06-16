@@ -1,4 +1,4 @@
-package com.wjdaudtn.mission.Todo
+package com.wjdaudtn.mission.Todo.Database
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -10,7 +10,7 @@ import androidx.room.Update
 public interface TodoDao {
 
     @Insert
-    fun setInsertTodo(todo:Todo)
+    fun setInsertTodo(todo:Todo): Long
 
     @Update
     fun setUpdateTodo(todo:Todo)
@@ -19,6 +19,7 @@ public interface TodoDao {
     fun setDeleteTodo(todo:Todo)
 
     @Query("SELECT * FROM Todo")
-    fun getUserAll():MutableList<Todo>
+    fun getTodoAll():MutableList<Todo>
+
 
 }

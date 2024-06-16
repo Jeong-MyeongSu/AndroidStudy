@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ch15_Service</string>
+    <string name="app_name">Mission</string>
     <dimen name="sm">14sp</dimen>
     <dimen name="md">18sp</dimen>
     <dimen name="lg">24sp</dimen>
