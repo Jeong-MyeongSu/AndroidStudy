@@ -98,8 +98,7 @@ class TodoMainActivity : AppCompatActivity() {
             }
 
             R.id.btn_back_main -> {
-                val intent = Intent(this@TodoMainActivity, MainActivity::class.java)
-                startActivity(intent)
+                finish()
             }
         }
     })

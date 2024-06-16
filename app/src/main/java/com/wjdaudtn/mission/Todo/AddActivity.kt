@@ -3,6 +3,7 @@ package com.wjdaudtn.mission.Todo
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.wjdaudtn.mission.R
@@ -29,13 +30,17 @@ class AddActivity : AppCompatActivity() {
     private val customClickListener: View.OnClickListener = (View.OnClickListener { v ->
         when(v.id){
             R.id.btn_save -> {
-                val intent = intent
-                intent.putExtra("result_title", binding.editTextTitleAdd.text.toString())
-                intent.putExtra("result_content", binding.editTextContentAdd.text.toString())
-                intent.putExtra("id",mId)
+                if(binding.editTextTitleAdd.text.toString() == "" || binding.editTextContentAdd.text.toString() == ""){
+                    Toast.makeText(this,"제목과 내용을 입력하세요",Toast.LENGTH_SHORT).show()
+                }else{
+                    val intent = intent
+                    intent.putExtra("result_title", binding.editTextTitleAdd.text.toString())
+                    intent.putExtra("result_content", binding.editTextContentAdd.text.toString())
+                    intent.putExtra("id",mId)
 
-                setResult(Activity.RESULT_OK, intent)
-                finish()
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
             }
 
             R.id.btn_back_todo -> {
