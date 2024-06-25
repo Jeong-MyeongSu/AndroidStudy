@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Todo.AddActivity">
+
     <LinearLayout
         android:id="@+id/app_bar_add"
         android:layout_width="match_parent"
@@ -13,53 +14,61 @@
         android:background="@color/main_color"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
+
         <TextView
             android:id="@+id/btn_back_todo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:layout_marginTop="1dp"
-            android:text = "◀"
-
+            android:padding="10dp"
+            android:text="◀"
             android:textColor="@color/white"
-            android:textSize="@dimen/lg"/>
+            android:textSize="@dimen/lg" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:layout_marginTop="1dp"
-            android:textSize="@dimen/lg"
-            android:text="TODO"
-            android:textColor="@color/white"/>
+            android:padding="10dp"
+            android:text="TODO                              "
+            android:textColor="@color/white"
+            android:textSize="@dimen/lg" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저 장"
+            android:textSize="@dimen/md"
+            app:cornerRadius="30dp"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/title_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="제목"
         android:textSize="@dimen/md"
-        android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_bar_add" />
+
     <EditText
         android:id="@+id/edit_text_title_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/title_add"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="5dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:textSize="@dimen/sm"
+        android:layout_marginBottom="5dp"
         android:hint="제목을 입력하세요."
+        android:maxLength="20"
         android:textColor="@color/high_gray"
-        android:maxLength="20"/>
+        android:textSize="@dimen/sm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_add" />
+
     <TextView
         android:id="@+id/content_add"
         android:layout_width="wrap_content"
@@ -69,25 +78,43 @@
         android:textSize="@dimen/md"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_title_add" />
+
     <EditText
         android:id="@+id/edit_text_content_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:hint="내용을 입력하세요."
         android:textColor="@color/high_gray"
         android:textSize="@dimen/sm"
-        android:hint="내용을 입력하세요."
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_add"
-   />
-
-    <Button
-        android:id="@+id/btn_save"
+        app:layout_constraintTop_toBottomOf="@+id/content_add" />
+    <Switch
+        android:id="@+id/btn_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="저장"
-        android:textSize="@dimen/md"
+        android:layout_marginStart="10dp"
+        android:text="알 람"
+        tools:ignore="UseSwitchCompatOrMaterialXml"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_add"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2024년 6월 23일"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_add" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_add"/>
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="411dp"
+        android:layout_height="158dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_date" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

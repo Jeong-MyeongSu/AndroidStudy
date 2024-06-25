@@ -17,9 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.tvRecyclerSample1.setOnClickListener(MyOnClickListener)
         binding.goTodo.setOnClickListener(MyOnClickListener)
-
     }
-
     private val MyOnClickListener: View.OnClickListener = (object:View.OnClickListener{
         override fun onClick(v: View?) {
             if(v == null){

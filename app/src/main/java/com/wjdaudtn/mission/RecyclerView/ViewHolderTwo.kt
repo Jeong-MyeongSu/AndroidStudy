@@ -25,7 +25,7 @@ class ViewHolderTwo : AppCompatActivity() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                var random = (1..2)
+                val random = (1..2)
                 data.add(TextandType(query.toString(), random.random()))
                 return false
             }
@@ -35,6 +35,8 @@ class ViewHolderTwo : AppCompatActivity() {
             }
         })
     }
+
+
     private fun initView() {
         data = mutableListOf(
             TextandType("MainItem", 1),
