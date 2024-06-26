@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +15,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.wjdaudtn.mission.AlarmReceiver
 import com.wjdaudtn.mission.R
 import com.wjdaudtn.mission.Todo.AddActivity
 import com.wjdaudtn.mission.Todo.Database.Todo
 import com.wjdaudtn.mission.Todo.Database.TodoDao
+import com.wjdaudtn.mission.Todo.TodoMainActivity
 import com.wjdaudtn.mission.databinding.ItemMainBinding
 import java.util.Calendar
 
@@ -28,7 +31,8 @@ class TodoViewHoler(val binding: ItemMainBinding) : RecyclerView.ViewHolder(bind
 class TodoAdapter(
     private var datas: MutableList<Todo>?,
     private val requestLauncher: ActivityResultLauncher<Intent>,
-    private var todoDao: TodoDao
+    private var todoDao: TodoDao,
+    private val activity: TodoMainActivity
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return TodoViewHoler(
@@ -48,6 +52,17 @@ class TodoAdapter(
             val item = it[position]
             binding.itemMainData.text = item.title
             binding.itemContentData.text = item.content
+
+            val currentCalendar = Calendar.getInstance()
+            val itemCalendar = Calendar.getInstance().apply {
+                set(Calendar.YEAR, item.year)
+                set(Calendar.MONTH, item.month - 1)
+                set(Calendar.DAY_OF_MONTH, item.dayOfMonth)
+                set(Calendar.HOUR_OF_DAY, item.hour)
+                set(Calendar.MINUTE, item.minute)
+                set(Calendar.SECOND, 0)
+            }
+
             //시간
             if (item.hour <= 11 && item.hour > 0) {
                 binding.ampm.text = "오전"
@@ -79,26 +94,44 @@ class TodoAdapter(
                     binding.time.text = "${item.hour - 12}:${item.minute}"
                 }
             }
-            binding.day.text = "${item.month}월 ${item.dayOfMonth}일(${dayOfWeekString(item.year,item.month,item.dayOfMonth)})"
-
-            binding.root.setOnLongClickListener {
-                Log.d("delete1", "$position, ${datas!!.size}, ${todoDao.getTodoAll().size}")
-                showPopupMenu(binding.root, position)
-                true
-            }
 
             if (item.alramSwitch == 1) {
-                val colorBlack = ContextCompat.getColor(holder.itemView.context, R.color.black)
-                binding.ampm.setTextColor(colorBlack)
-                binding.time.setTextColor(colorBlack)
-                binding.day.setTextColor(colorBlack)
                 binding.imageAlarm.setTransitionVisibility(View.VISIBLE)
+
+                val timeDifference = itemCalendar.timeInMillis - currentCalendar.timeInMillis
+                val minutesLeft = timeDifference / 60000
+
+                val textColor = when {
+                    minutesLeft <= 0 ->Color.parseColor("#848484")
+                    minutesLeft <= 30 -> Color.RED
+                    minutesLeft <= 60 -> Color.parseColor("#FFA500")
+                    else -> Color.BLACK
+                }
+                binding.ampm.setTextColor(textColor)
+                binding.time.setTextColor(textColor)
+                binding.day.setTextColor(textColor)
             } else {
                 val colorHighGray =
                     ContextCompat.getColor(holder.itemView.context, R.color.high_gray)
                 binding.ampm.setTextColor(colorHighGray)
                 binding.time.setTextColor(colorHighGray)
                 binding.day.setTextColor(colorHighGray)
+                binding.imageAlarm.setTransitionVisibility(View.INVISIBLE)
+
+            }
+
+            if (currentCalendar.get(Calendar.YEAR) == itemCalendar.get(Calendar.YEAR) &&
+                currentCalendar.get(Calendar.MONTH) == itemCalendar.get(Calendar.MONTH) &&
+                currentCalendar.get(Calendar.DAY_OF_MONTH) == itemCalendar.get(Calendar.DAY_OF_MONTH)) {
+                binding.day.text = "today"
+            } else {
+                binding.day.text = "${item.month}월 ${item.dayOfMonth}일(${dayOfWeekString(item.year,item.month,item.dayOfMonth)})"
+            }
+
+            binding.root.setOnLongClickListener {
+                Log.d("delete1", "$position, ${datas!!.size}, ${todoDao.getTodoAll().size}")
+                showPopupMenu(binding.root, position)
+                true
             }
 
         }
@@ -136,6 +169,7 @@ class TodoAdapter(
                     Log.d("delete2", "$position, ${datas!!.size}, ${todoDao.getTodoAll().size}")
                     datas?.remove(todoItem)
                     notifyDataSetChanged()
+                    activity.cancelAlarm(todoItem)
 
                     true
                 }
@@ -145,6 +179,7 @@ class TodoAdapter(
         }
         popupMenu.show()
     }
+
 
     fun addItem(item: Todo) {
         datas?.add(item)
@@ -183,5 +218,4 @@ class TodoAdapter(
             else -> ""
         }
     }
-
 }

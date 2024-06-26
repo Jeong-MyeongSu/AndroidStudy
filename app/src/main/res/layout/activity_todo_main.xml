@@ -46,7 +46,8 @@
             app:backgroundTint="@color/main2_color"
             app:strokeColor="@color/white"
             app:strokeWidth="1dp"
-            android:layout_marginLeft="200dp"/>
+            android:layout_marginLeft="200dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView

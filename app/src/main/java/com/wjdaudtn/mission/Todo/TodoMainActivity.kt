@@ -3,12 +3,10 @@ package com.wjdaudtn.mission.Todo
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -18,9 +16,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.wjdaudtn.mission.AlarmReceiver
 import com.wjdaudtn.mission.R
@@ -41,8 +39,37 @@ class TodoMainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private val localDate: LocalDate = LocalDate.now()
 
+    @SuppressLint("ScheduleExactAlarm")
     private fun setAlarm(todo: Todo) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java).apply {
+            putExtra("todoTitle", todo.title)
+            putExtra("todoContent", todo.content)
+            putExtra("todoId",todo.id)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            todo.id,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, todo.year)
+            set(Calendar.MONTH, todo.month - 1) // Month는 0부터 시작
+            set(Calendar.DAY_OF_MONTH, todo.dayOfMonth)
+            set(Calendar.HOUR_OF_DAY, todo.hour)
+            set(Calendar.MINUTE, todo.minute)
+            set(Calendar.SECOND, 0)
+        }
+        Log.d("setAlarm", "Setting alarm for: ${calendar.time}")
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+    }
+    fun cancelAlarm(todo: Todo) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, todo.id, intent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.cancel(pendingIntent)
     }
 
     //api30이상 미만에서는 startactivityforresult, onactivityresult
@@ -78,6 +105,7 @@ class TodoMainActivity : AppCompatActivity() {
             // 데이터베이스에 Todo 객체 업데이트
             mTodoDao.setUpdateTodo(todo)
             mAdapter.updateItem(todo)
+            alarmAsk(todo,alarmSwitch,year,month,dayOfMonth,hour,minute)
 
         } else {
             val todo = Todo().apply {
@@ -95,31 +123,17 @@ class TodoMainActivity : AppCompatActivity() {
             val id = mTodoDao.setInsertTodo(todo)
             todo.id = id.toInt()
             mAdapter.addItem(todo)
-
+            alarmAsk(todo,alarmSwitch,year,month,dayOfMonth,hour,minute)
         }
-        if(alarmSwitch == 0){
-            Log.d("알람","알람 꺼짐")
-            Toast.makeText(this,"알람 꺼짐",Toast.LENGTH_SHORT).show()
-        }else{
-            Log.d("알람","알람 켜짐")
-            // 현재 시간 밀리초로 가져오기
-            val currentTime = Calendar.getInstance().timeInMillis
-            // 타겟 시간 밀리초로 설정
-            val targetTime = Calendar.getInstance().apply {
-                set(year, month - 1, dayOfMonth, hour, minute)
-            }.timeInMillis
 
-            // 남은 시간 계산
-            val remainingTime = targetTime - currentTime
-            val seconds = remainingTime / 1000 % 60
-            val minutes = remainingTime / 1000 / 60 % 60
-            val hours = remainingTime / 1000 / 60 / 60 % 24
-            val days = remainingTime / 1000 / 60 / 60 / 24
+    }
 
-            // 남은 시간을 문자열로 변환
-            val remainingTimeString = "남은 시간: ${days}일 ${hours}시간 ${minutes}분 ${seconds}초"
-            // Toast 메시지로 표시
-            Toast.makeText(this, remainingTimeString, Toast.LENGTH_SHORT).show()
+    private val alarmReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val todoId = intent.getIntExtra("todoId", -1)
+            if (todoId != -1) {
+                updateTodoItem(todoId)
+            }
         }
     }
 
@@ -141,7 +155,7 @@ class TodoMainActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerviewTodo.layoutManager = layoutManager
-        mAdapter = TodoAdapter(mTodoDao.getTodoAll(), requestLauncher, mTodoDao)
+        mAdapter = TodoAdapter(mTodoDao.getTodoAll(), requestLauncher, mTodoDao, this)
         binding.recyclerviewTodo.adapter = mAdapter
         val dividerItemDecoration = DividerItemDecoration(this, layoutManager.orientation);
         binding.recyclerviewTodo.addItemDecoration(dividerItemDecoration)
@@ -149,8 +163,24 @@ class TodoMainActivity : AppCompatActivity() {
         binding.btnBackMain.setOnClickListener(customClickListener)
         binding.btnEditing.setOnClickListener(customClickListener)
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(alarmReceiver, IntentFilter("com.example.todo.ALARM_TRIGGERED"))
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        // 액티비티가 파괴될 때 브로드캐스트 수신기 해제
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(alarmReceiver)
     }
 
+    //알림이 울렸을때 업데이트
+    private fun updateTodoItem(todoId: Int) {
+        val todo = mTodoDao.getTodoById(todoId)
+        if (todo != null) {
+            todo.alramSwitch = 0 // 알람이 울렸으므로 알람 스위치 꺼짐
+            Log.d("알림 울린 후","${todo}")
+            mTodoDao.setUpdateTodo(todo)
+            mAdapter.updateItem(todo)
+        }
+    }
 
     private val customClickListener: View.OnClickListener = (View.OnClickListener { v ->
         when (v.id) {
@@ -167,9 +197,34 @@ class TodoMainActivity : AppCompatActivity() {
             R.id.btn_back_main -> {
                 finish()
             }
-            R.id.btn_editing -> {
-
-            }
         }
     })
+    private fun alarmAsk(todo:Todo, alarmSwitch:Int , year:Int, month:Int, dayOfMonth:Int, hour:Int, minute:Int){
+        if(alarmSwitch == 0){
+            Log.d("알람","알람 꺼짐")
+            Toast.makeText(this,"알람 꺼짐",Toast.LENGTH_SHORT).show()
+            cancelAlarm(todo)
+        }else{
+            Log.d("알람","알람 켜짐")
+            // 현재 시간 밀리초로 가져오기
+            val currentTime = Calendar.getInstance().timeInMillis
+            // 타겟 시간 밀리초로 설정
+            val targetTime = Calendar.getInstance().apply {
+                set(year, month - 1, dayOfMonth, hour, minute)
+            }.timeInMillis
+
+            // 남은 시간 계산
+            val remainingTime = targetTime - currentTime
+            val seconds = remainingTime / 1000 % 60
+            val minutes = remainingTime / 1000 / 60 % 60
+            val hours = remainingTime / 1000 / 60 / 60 % 24
+            val days = remainingTime / 1000 / 60 / 60 / 24
+
+            // 남은 시간을 문자열로 변환
+            val remainingTimeString = "남은 시간: ${days}일 ${hours}시간 ${minutes}분 ${seconds}초"
+            // Toast 메시지로 표시
+            Toast.makeText(this, remainingTimeString, Toast.LENGTH_SHORT).show()
+            setAlarm(todo)
+        }
+    }
 }
