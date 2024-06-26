@@ -21,5 +21,8 @@ public interface TodoDao {
     @Query("SELECT * FROM Todo")
     fun getTodoAll():MutableList<Todo>
 
+    @Query("SELECT * FROM Todo WHERE id = :todoId")
+    fun getTodoById(todoId: Int): Todo?
+
 
 }
