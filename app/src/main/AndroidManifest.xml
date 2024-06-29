@@ -21,7 +21,6 @@
             android:name=".AlarmReceiver"
             android:enabled="true"
             android:exported="true" />
-
         <activity
             android:name=".Todo.AddActivity"
             android:exported="false"
