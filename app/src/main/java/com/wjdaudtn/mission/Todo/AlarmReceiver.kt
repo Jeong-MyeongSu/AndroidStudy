@@ -1,4 +1,4 @@
-package com.wjdaudtn.mission
+package com.wjdaudtn.mission.Todo
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,11 +9,12 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.wjdaudtn.mission.R
 
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("AlarmReceiver", "Alarm received!")
+        Log.d("AlarmReceiver", "Alarm received!(notification)")
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "todo_channel"
         val channelName = "Todo Notifications"
@@ -21,6 +22,7 @@ class AlarmReceiver : BroadcastReceiver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
+
         }
 
         val notification = NotificationCompat.Builder(context, channelId)

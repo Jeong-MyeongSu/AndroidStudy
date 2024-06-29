@@ -15,3 +15,7 @@
 [앱 아이콘 생성: 앱 마켓 아이콘용](https://appiconmaker.co/)
 [무료 배경이미지](https://www.shutterstock.com/ko/?c3apidt=p52913990603&gclid=CjwKCAjw4_H6BRALEiwAvgfzqy_YoX_wjDMewTbyQ9SOn7dKmpGiBxHbh2tfSl5fekycO07yroNNDBoCssMQAvD_BwE&gclsrc=aw.ds&kw=unsplash)   
 [무료 아이콘](https://www.flaticon.com/kr/uicons/interface-icons)   
+
+
+리스트 가이드 참고 
+https://m3.material.io/components/lists/specs

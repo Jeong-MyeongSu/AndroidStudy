@@ -1,9 +1,6 @@
 package com.wjdaudtn.mission.Todo.Adapter
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -15,9 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.RecyclerView
-import com.wjdaudtn.mission.AlarmReceiver
 import com.wjdaudtn.mission.R
 import com.wjdaudtn.mission.Todo.AddActivity
 import com.wjdaudtn.mission.Todo.Database.Todo
@@ -63,6 +58,7 @@ class TodoAdapter(
                 set(Calendar.SECOND, 0)
             }
 
+
             //시간
             if (item.hour <= 11 && item.hour > 0) {
                 binding.ampm.text = "오전"
@@ -99,10 +95,10 @@ class TodoAdapter(
                 binding.imageAlarm.setTransitionVisibility(View.VISIBLE)
 
                 val timeDifference = itemCalendar.timeInMillis - currentCalendar.timeInMillis
-                val minutesLeft = timeDifference / 60000
+                val minutesLeft = timeDifference / 60_000
 
                 val textColor = when {
-                    minutesLeft <= 0 ->Color.parseColor("#848484")
+                    minutesLeft < 0 ->Color.parseColor("#848484")
                     minutesLeft <= 30 -> Color.RED
                     minutesLeft <= 60 -> Color.parseColor("#FFA500")
                     else -> Color.BLACK

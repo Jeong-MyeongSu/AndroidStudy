@@ -20,7 +20,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
-import com.wjdaudtn.mission.AlarmReceiver
 import com.wjdaudtn.mission.R
 import com.wjdaudtn.mission.Todo.Adapter.TodoAdapter
 import com.wjdaudtn.mission.Todo.Database.Todo
@@ -32,14 +31,12 @@ import java.util.Calendar
 
 class TodoMainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTodoMainBinding
-
     private lateinit var mAdapter: TodoAdapter
     private lateinit var mTodoData: TodoDatabase
     private lateinit var mTodoDao: TodoDao
     @RequiresApi(Build.VERSION_CODES.O)
-    private val localDate: LocalDate = LocalDate.now()
+    private val localDate: LocalDate = LocalDate.now()//오늘 날짜 AddActivity에 intent 초기값을위해
 
-    @SuppressLint("ScheduleExactAlarm")
     private fun setAlarm(todo: Todo) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java).apply {
@@ -56,7 +53,7 @@ class TodoMainActivity : AppCompatActivity() {
 
         val calendar = Calendar.getInstance().apply {
             set(Calendar.YEAR, todo.year)
-            set(Calendar.MONTH, todo.month - 1) // Month는 0부터 시작
+            set(Calendar.MONTH, todo.month - 1)
             set(Calendar.DAY_OF_MONTH, todo.dayOfMonth)
             set(Calendar.HOUR_OF_DAY, todo.hour)
             set(Calendar.MINUTE, todo.minute)
@@ -157,18 +154,18 @@ class TodoMainActivity : AppCompatActivity() {
         binding.recyclerviewTodo.layoutManager = layoutManager
         mAdapter = TodoAdapter(mTodoDao.getTodoAll(), requestLauncher, mTodoDao, this)
         binding.recyclerviewTodo.adapter = mAdapter
-        val dividerItemDecoration = DividerItemDecoration(this, layoutManager.orientation);
+        val dividerItemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.recyclerviewTodo.addItemDecoration(dividerItemDecoration)
         binding.btnTodo.setOnClickListener(customClickListener)
         binding.btnBackMain.setOnClickListener(customClickListener)
-        binding.btnEditing.setOnClickListener(customClickListener)
-
+//        binding.btnEditing.setOnClickListener(customClickListener)
+        //브로드캐스트 수신기
         LocalBroadcastManager.getInstance(this).registerReceiver(alarmReceiver, IntentFilter("com.example.todo.ALARM_TRIGGERED"))
     }
     override fun onDestroy() {
         super.onDestroy()
         // 액티비티가 파괴될 때 브로드캐스트 수신기 해제
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(alarmReceiver)
+//        LocalBroadcastManager.getInstance(this).unregisterReceiver(alarmReceiver)
     }
 
     //알림이 울렸을때 업데이트
