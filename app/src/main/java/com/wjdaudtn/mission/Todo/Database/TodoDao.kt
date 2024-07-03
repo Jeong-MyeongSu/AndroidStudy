@@ -1,4 +1,4 @@
-package com.wjdaudtn.mission.Todo.Database
+package com.wjdaudtn.mission.todo.database
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -23,6 +23,5 @@ public interface TodoDao {
 
     @Query("SELECT * FROM Todo WHERE id = :todoId")
     fun getTodoById(todoId: Int): Todo?
-
 
 }

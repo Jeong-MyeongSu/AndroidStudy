@@ -1,4 +1,4 @@
-package com.wjdaudtn.mission.RecyclerView
+package com.wjdaudtn.mission.recyclerView
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -44,7 +44,7 @@ class ViewHolderTwo : AppCompatActivity() {
         )
 
         binding.recyclerView.adapter = MyAdapter(data)
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(baseContext)
 
     }
 

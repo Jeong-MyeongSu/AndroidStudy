@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Todo.TodoMainActivity">
+    tools:context=".todo.TodoMainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -24,7 +24,7 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:layout_marginTop="1dp"
-            android:textColor="@color/white"
+            android:textColor="@color/high_gray"
             android:textSize="@dimen/lg"/>
         <TextView
             android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
             android:layout_marginTop="1dp"
             android:textSize="@dimen/lg"
             android:text="TODO"
-            android:textColor="@color/white"/>
+            android:textColor="@color/black"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_editing"
