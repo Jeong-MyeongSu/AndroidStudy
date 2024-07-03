@@ -2,11 +2,11 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Mission" parent="Theme.Material3.DayNight.NoActionBar">
 
-        <item name="colorPrimary">@color/main_color</item>
-        <item name="colorPrimaryVariant">@color/secend_color</item>
+        <item name="colorPrimary">@color/deep_color</item>
+        <item name="colorPrimaryVariant">@color/deep_color</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/main_color</item>
-        <item name="colorSecondaryVariant">@color/secend_color</item>
+        <item name="colorSecondary">@color/deep_color</item>
+        <item name="colorSecondaryVariant">@color/second2_color</item>
         <item name="android:statusBarColor">@color/deep_color</item>
 
     </style>

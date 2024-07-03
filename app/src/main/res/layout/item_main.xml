@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/low_gray"
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,76 +10,53 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/ampm"
-            android:layout_width="wrap_content"
-            android:layout_height="19dp"
-            android:layout_weight="10"
-            android:gravity="right"
-            android:paddingEnd="5dp"
-            android:textColor="@color/high_gray"
-            android:textSize="@dimen/sm"
-            tools:text="오전" />
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/high_gray"
-            android:textSize="@dimen/lg"
-            tools:text="3:00" />
-
-        <TextView
-            android:id="@+id/day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:textColor="@color/high_gray"
-            android:textSize="@dimen/md"
-            tools:ignore="RtlHardcoded"
-            tools:text="6월23일(일)" />
-
         <ImageView
             android:id="@+id/image_alarm"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_margin="5dp"
             android:background="@drawable/bell_alarm"
+            android:padding="5dp" />
+
+        <TextView
+            android:id="@+id/item_day_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:padding="5dp"
-            android:visibility="invisible" />
+            android:textSize="@dimen/sm"
+            tools:text="3:00 6월 29일(토)" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp">
 
         <TextView
             android:id="@+id/item_main_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:gravity="left"
-            android:padding="10dp"
             android:textSize="@dimen/lg"
             android:textStyle="bold"
             tools:text="test" />
 
-
+        <TextView
+            android:id="@+id/item_content_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/high_gray"
+            android:textSize="@dimen/md"
+            android:textStyle="bold"
+            tools:text="testdfdfdffdfdfdffdfdfdfdfdfd123123123123fdfdfdf" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/item_content_data"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:gravity="left"
-        android:maxLines="1"
-        android:paddingStart="10dp"
-        android:paddingBottom="10dp"
-        android:textColor="@color/high_gray"
-        android:textSize="@dimen/md"
-        android:textStyle="bold"
-        tools:text="testdfdfdffdfdfdffdfdfdfdfdfd123123123123fdfdfdf" />
+
 </LinearLayout>

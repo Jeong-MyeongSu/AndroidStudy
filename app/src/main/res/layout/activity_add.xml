@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Todo.AddActivity">
+    tools:context=".todo.AddActivity">
 
     <LinearLayout
         android:id="@+id/app_bar_add"
@@ -22,99 +22,135 @@
             android:layout_marginTop="1dp"
             android:padding="10dp"
             android:text="◀"
-            android:textColor="@color/white"
+            android:textColor="@color/high_gray"
             android:textSize="@dimen/lg" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:padding="10dp"
-            android:text="TODO                              "
-            android:textColor="@color/white"
+            android:text="TODO"
+            android:textColor="@color/black"
             android:textSize="@dimen/lg" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/main_color"
             android:text="저 장"
+            android:textColor="@color/black"
             android:textSize="@dimen/md"
             app:cornerRadius="30dp"
-            app:strokeColor="@color/white"
+            app:strokeColor="@color/high_gray"
             app:strokeWidth="1dp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/title_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="제목"
-        android:textSize="@dimen/md"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar_add" />
-
-    <EditText
-        android:id="@+id/edit_text_title_add"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_text_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
-        android:hint="제목을 입력하세요."
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="제목"
         android:maxLength="20"
         android:textColor="@color/high_gray"
         android:textSize="@dimen/sm"
+        app:boxBackgroundColor="@color/low_gray"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:helperText="제목을 적어주세요"
+        app:helperTextTextColor="@color/low_gray"
+        app:hintTextColor="@color/high_gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_add" />
+        app:layout_constraintTop_toBottomOf="@id/app_bar_add">
 
-    <TextView
-        android:id="@+id/content_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="내용"
-        android:textSize="@dimen/md"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_title_add" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_title_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#F2ECEE"
+            android:padding="10dp"
+            android:textColor="@android:color/black" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/edit_text_content_add"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_text_content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:hint="내용을 입력하세요."
-        android:textColor="@color/high_gray"
-        android:textSize="@dimen/sm"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="내용"
+        app:boxBackgroundColor="@color/low_gray"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/black"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:helperText="내용을 적어주세요"
+        app:helperTextTextColor="@color/low_gray"
+        app:hintTextColor="@color/high_gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_add" />
-    <Switch
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_title_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_content_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#F2ECEE"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:textColor="@android:color/black" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/btn_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="알 람"
-        tools:ignore="UseSwitchCompatOrMaterialXml"
+        android:layout_marginStart="16dp"
+        android:text="알 람 "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_add"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_date"
-        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/date_Layout"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:text="2024년 6월 23일"
+        android:layout_centerInParent="true"
+        android:hint="YYYY/DD/MM"
+        android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_add"/>
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_layout">
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="411dp"
-        android:layout_height="158dp"
-        android:timePickerMode="spinner"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/btn_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none"
+            tools:text="2024년 6월 23일" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:hint="time"
+        android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_date" />
+        app:layout_constraintTop_toBottomOf="@+id/date_Layout">
 
-
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/btn_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none"
+            tools:text="오전 3시 30분" />
+    </com.google.android.material.textfield.TextInputLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

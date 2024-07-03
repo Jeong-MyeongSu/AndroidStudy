@@ -21,21 +21,21 @@ class ExampleUnitTest {
     }
 
 
-    @Test
-    fun main() {
-        val currentTimeMillis = System.currentTimeMillis()
-        val formattedDate = formatDateTime(currentTimeMillis)
-        println("Formatted Date: $formattedDate")
-    }
-
-    fun formatDateTime(milliseconds: Long): String {
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA)
-        calendar.timeInMillis = milliseconds
-
-        val sdf = SimpleDateFormat("a h:mm M월 d일(EEE)", Locale.KOREA)
-        sdf.timeZone = calendar.timeZone
-        return sdf.format(calendar.time)
-    }
+//    @Test
+//    fun main() {
+//        val currentTimeMillis = System.currentTimeMillis()
+//        val formattedDate = formatDateTime(currentTimeMillis)
+//        println("Formatted Date: $formattedDate")
+//    }
+//
+//    fun formatDateTime(milliseconds: Long): String {
+//        val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA)
+//        calendar.timeInMillis = milliseconds
+//
+//        val sdf = SimpleDateFormat("a h:mm M월 d일(EEE)", Locale.KOREA)
+//        sdf.timeZone = calendar.timeZone
+//        return sdf.format(calendar.time)
+//    }
 
 
 }

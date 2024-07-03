@@ -1,26 +1,56 @@
-package com.wjdaudtn.mission.Todo
+package com.wjdaudtn.mission.todo
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.wjdaudtn.mission.R
+import com.wjdaudtn.mission.todo.database.Todo
+import com.wjdaudtn.mission.todo.database.TodoDao
 import com.wjdaudtn.mission.databinding.ActivityAddBinding
+import com.wjdaudtn.mission.todo.util.Const.Companion.DATE_PICKER_TAG
+import com.wjdaudtn.mission.todo.util.Const.Companion.DEFAULT_VALUE
+import com.wjdaudtn.mission.todo.util.Const.Companion.DEFAULT_VALUE_ALARM
+import com.wjdaudtn.mission.todo.util.Const.Companion.FORMAT_PATTEN_DATE
+import com.wjdaudtn.mission.todo.util.Const.Companion.FORMAT_PATTEN_TODAY
+import com.wjdaudtn.mission.todo.util.Const.Companion.ONE
+import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_ALARM_SWITCH
+import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_CONTENT
+import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_ID
+import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_MILLISECOND
+import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_TITLE
+import com.wjdaudtn.mission.todo.util.Const.Companion.SAVE_NULL_TEXT_TOAST
+import com.wjdaudtn.mission.todo.util.Const.Companion.TIME_IS_OVER
+import com.wjdaudtn.mission.todo.util.Const.Companion.TIME_PICKER_TAG
+import com.wjdaudtn.mission.todo.util.Const.Companion.TIME_ZONE_ID
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class AddActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddBinding
     private var mId = -1
-    private var year = 0
-    private var month = 0
-    private var dayOfmonth = 0
+    private var mmillisecond = 0L
     private var alarmSwitch = 0
+    val calendar by lazy {
+        Calendar.getInstance().apply {
+            timeInMillis = mmillisecond
+        }
+    }
+
+    private lateinit var dbInstance: TodoDao
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,109 +58,95 @@ class AddActivity : AppCompatActivity() {
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mId = intent.getIntExtra("id", -1)
-        year = intent.getIntExtra("year", -1)
-        month = intent.getIntExtra("month", -1)
-        dayOfmonth = intent.getIntExtra("dayOfMonth", -1)
-        alarmSwitch = intent.getIntExtra("alarmSwitch", 0)
+        dbInstance = DataBaseInit().getTodoDao(this)
 
+        mId = intent.getIntExtra(RESULT_KEY_ID, DEFAULT_VALUE)
+        mmillisecond = intent.getLongExtra(RESULT_KEY_MILLISECOND, DEFAULT_VALUE.toLong())
+        alarmSwitch = intent.getIntExtra(RESULT_KEY_ALARM_SWITCH, DEFAULT_VALUE_ALARM)
 
-        binding.editTextTitleAdd.setText(intent.getStringExtra("title"))
-        binding.editTextContentAdd.setText(intent.getStringExtra("content"))
-        binding.btnDate.text = "$year 년 $month 월 $dayOfmonth 일"
-        binding.timePicker.hour = intent.getIntExtra("hour", -1)
-        binding.timePicker.minute = intent.getIntExtra("minute", -1)
-        if (alarmSwitch == 1) {
-            binding.btnSwitch.isChecked = true
-        } else {
-            binding.btnSwitch.isChecked = false
+        val mTodo= if (mId != -1) dbInstance.getTodoById(mId) else null
+        if (mTodo != null) {
+            mmillisecond = mTodo.millisecond
+            alarmSwitch = mTodo.alramSwitch
+
         }
-        binding.btnSave.setOnClickListener(customClickListener)
-        binding.btnBackTodo.setOnClickListener(customClickListener)
-        binding.btnDate.setOnClickListener(customClickListener)
-        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-        binding.btnSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                alarmSwitch = 1
-            } else {
-                alarmSwitch = 0
-            }
-
-            Log.d("alarm", "$alarmSwitch")
-        }
-
+        settingBinding(mTodo)
     }
-
-    private val customClickListener: View.OnClickListener = (View.OnClickListener { v ->
-        when (v.id) {
-            R.id.btn_save -> daveTodo()
-            R.id.btn_date -> showDate()
-            R.id.btn_back_todo -> {
-                setResult(Activity.RESULT_OK, intent)
-                finish()
-            }
-        }
-    })
-
-
-    fun daveTodo(){
+/* 저장 버튼 눌렀을 때 */
+    private fun saveTodo() {
         val currentCalendar = Calendar.getInstance()
-        val eventCalendar = Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month - 1)
-            set(Calendar.DAY_OF_MONTH, dayOfmonth)
-            set(Calendar.HOUR_OF_DAY, binding.timePicker.hour)
-            set(Calendar.MINUTE, binding.timePicker.minute)
-            set(Calendar.SECOND, 0)
-        }
+        val eventCalendar = calendar.timeInMillis
         if (binding.editTextTitleAdd.text.toString() == "" || binding.editTextContentAdd.text.toString() == "") {
-            Toast.makeText(this, "제목과 내용을 입력하세요", Toast.LENGTH_SHORT).show()
-        } else if (eventCalendar.timeInMillis <= currentCalendar.timeInMillis) {
-            Toast.makeText(this, "시간이 지났습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, SAVE_NULL_TEXT_TOAST, Toast.LENGTH_SHORT).show()
+        } else if (eventCalendar <= currentCalendar.timeInMillis) {
+            Toast.makeText(baseContext, TIME_IS_OVER, Toast.LENGTH_SHORT).show()
         } else {
             val intent = intent
-            intent.putExtra("result_title", binding.editTextTitleAdd.text.toString())
-            intent.putExtra("result_content", binding.editTextContentAdd.text.toString())
-            intent.putExtra("id", mId)
-            intent.putExtra("year", year)
-            intent.putExtra("month", month)
-            intent.putExtra("dayOfMonth", dayOfmonth)
-            intent.putExtra("hour", binding.timePicker.hour)
-            intent.putExtra("minute", binding.timePicker.minute)
-            intent.putExtra("alarmSwitch", alarmSwitch)
+            intent.putExtra(RESULT_KEY_TITLE, binding.editTextTitleAdd.text.toString())
+            intent.putExtra(RESULT_KEY_CONTENT, binding.editTextContentAdd.text.toString())
+            intent.putExtra(RESULT_KEY_ID, mId)
+            intent.putExtra(RESULT_KEY_MILLISECOND, eventCalendar)
+            intent.putExtra(RESULT_KEY_ALARM_SWITCH, alarmSwitch)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
     }
 
-    /**
-     * 할일 추가 화면에서 날짜 버튼 클릭 했을때
-     */
-    fun showDate() {
-        // 현재 날짜를 얻기 위한 Calendar 인스턴스 생성
-        val calendar = Calendar.getInstance()
-        // DatePickerDialog 생성
-        val datePickerDialog = DatePickerDialog(
-            this,
-            object : DatePickerDialog.OnDateSetListener {
-                @SuppressLint("SetTextI18n")
-                override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-                    binding.btnDate.text = "${p1}년 ${p2 + 1}월 ${p3}일"
-                    year = p1
-                    month = p2 + 1
-                    dayOfmonth = p3
-                }
-            },
-            intent.getIntExtra("year", -1),
-            intent.getIntExtra("month", -1) - 1,
-            intent.getIntExtra("dayOfMonth", -1)
-        )
-        // 최소 날짜를 현재 날짜로 설정
-        datePickerDialog.datePicker.minDate = calendar.timeInMillis
-        // DatePickerDialog 표시
-        datePickerDialog.show()
-    }
 
+/* 데이트 픽커*/
+    private fun showDatePicker(editText: TextInputEditText) {
+        val todayCalendar = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE_ID))
+        todayCalendar.timeInMillis = MaterialDatePicker.todayInUtcMilliseconds()
+        val todayTimeInMillis = todayCalendar.timeInMillis
+
+        // 내일 날짜 설정
+        val tomorrowCalendar = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE_ID))
+        tomorrowCalendar.add(Calendar.DATE, ONE)
+        val tomorrowTimeInMillis = tomorrowCalendar.timeInMillis
+
+        val constraintsBuilder = CalendarConstraints.Builder()
+            .setStart(todayTimeInMillis) // 최소 날짜 설정: 오늘 날짜
+            .setEnd(tomorrowTimeInMillis + (1000 * 60 * 60 * 24 * 365L)) // 최대 날짜 설정: 1년 후
+            .setValidator(DateValidatorPointForward.now()) // 오늘 이후 날짜만 선택 가능하도록 설정
+            .build()
+
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select Date")
+            .setSelection(todayTimeInMillis) // 기본 선택 날짜 설정: 오늘 날짜
+            .setCalendarConstraints(constraintsBuilder)
+            .build()
+
+        datePicker.show(supportFragmentManager, DATE_PICKER_TAG)
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            calendar.timeInMillis = selection
+            val dateFormat = SimpleDateFormat(FORMAT_PATTEN_DATE, Locale.KOREA)
+            val date = Date(selection)
+            editText.setText(dateFormat.format(date))
+        }
+    }
+/* 타임 픽커*/
+    private fun showTimePicker(editText: TextInputEditText) {
+        val picker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(calendar.get(Calendar.HOUR_OF_DAY))
+            .setMinute(calendar.get(Calendar.MINUTE))
+            .setTitleText("Select Time")
+            .build()
+
+        picker.show(supportFragmentManager, TIME_PICKER_TAG)
+
+        picker.addOnPositiveButtonClickListener {
+            val hour = picker.hour
+            val minute = picker.minute
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+            calendar.set(Calendar.MINUTE, minute)
+            val timeFormat = SimpleDateFormat(FORMAT_PATTEN_TODAY, Locale.KOREA)
+            val formattedTime = timeFormat.format(calendar.time)
+            editText.setText(formattedTime)
+        }
+    }
+/* 뒤로가기 버튼*/
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             setResult(Activity.RESULT_OK, intent)
@@ -138,5 +154,35 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
+/* 버튼 TEXT 및 버튼 클릭 인터페이스 */
+    @SuppressLint("SetTextI18n")
+    private fun settingBinding(mTodo: Todo?){
+        binding.editTextTitleAdd.setText(mTodo?.title)
+        binding.editTextContentAdd.setText(mTodo?.content)
+        binding.btnDate.setText("${calendar.get(Calendar.YEAR)} 년 ${calendar.get(Calendar.MONTH) + 1} 월 ${calendar.get(Calendar.DAY_OF_MONTH)} 일")
+        binding.btnTime.setText("${if(calendar.get(Calendar.AM_PM) == Calendar.AM) "오전" else "오후"} ${calendar.get(Calendar.HOUR)}시 ${calendar.get(Calendar.MINUTE)}분")
+        binding.btnSwitch.isChecked = alarmSwitch == 1 //1이면 true 아니면 false
 
+        binding.btnSave.setOnClickListener(customClickListener)
+        binding.btnBackTodo.setOnClickListener(customClickListener)
+        binding.btnDate.setOnClickListener(customClickListener)
+        binding.btnTime.setOnClickListener(customClickListener)
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+        binding.btnSwitch.setOnCheckedChangeListener { _, isChecked ->
+            alarmSwitch = if (isChecked) 1 else 0
+            Log.d("alarm", "$alarmSwitch")
+        }
+    }
+
+    private val customClickListener: View.OnClickListener = (View.OnClickListener { v ->
+        when (v.id) {
+            R.id.btn_save -> saveTodo()
+            R.id.btn_date -> showDatePicker(binding.btnDate)
+            R.id.btn_time -> showTimePicker(binding.btnTime)
+            R.id.btn_back_todo -> {
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
+        }
+    })
 }
