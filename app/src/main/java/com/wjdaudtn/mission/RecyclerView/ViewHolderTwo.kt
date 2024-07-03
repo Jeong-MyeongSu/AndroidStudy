@@ -1,5 +1,6 @@
 package com.wjdaudtn.mission.recyclerView
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,9 +14,9 @@ import com.wjdaudtn.mission.databinding.ItemSubBinding
 
 
 class ViewHolderTwo : AppCompatActivity() {
-    lateinit var binding: ActivityViewHolderTwoBinding
-    data class TextandType(val text: String, val type: Int)
-    lateinit var data: MutableList<TextandType>
+    private lateinit var binding: ActivityViewHolderTwoBinding
+    data class TextAndType(val text: String, val type: Int)
+    lateinit var data: MutableList<TextAndType>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityViewHolderTwoBinding.inflate(layoutInflater)
@@ -26,7 +27,7 @@ class ViewHolderTwo : AppCompatActivity() {
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 val random = (1..2)
-                data.add(TextandType(query.toString(), random.random()))
+                data.add(TextAndType(query.toString(), random.random()))
                 return false
             }
 
@@ -39,8 +40,8 @@ class ViewHolderTwo : AppCompatActivity() {
 
     private fun initView() {
         data = mutableListOf(
-            TextandType("MainItem", 1),
-            TextandType("MainItem", 2)
+            TextAndType("MainItem", 1),
+            TextAndType("MainItem", 2)
         )
 
         binding.recyclerView.adapter = MyAdapter(data)
@@ -48,7 +49,7 @@ class ViewHolderTwo : AppCompatActivity() {
 
     }
 
-    class MyAdapter(var data: MutableList<TextandType>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class MyAdapter(private var data: MutableList<TextAndType>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             return when (viewType) {
                 1 -> MyViewHolder1(
@@ -69,6 +70,7 @@ class ViewHolderTwo : AppCompatActivity() {
             }
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
 

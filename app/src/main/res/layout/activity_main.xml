@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/tv_recycler_sample_1"
-        android:text="RecyclerView - 뷰 홀더 두개 혼용해서 보여주기"
+        android:text="@string/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_blue_dark"
@@ -18,7 +18,7 @@
         android:textSize="20sp"/>
     <TextView
         android:id="@+id/go_todo"
-        android:text="TODO project -   할 일 어플리케이션 프로젝트 "
+        android:text="@string/todo_project"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_blue_dark"

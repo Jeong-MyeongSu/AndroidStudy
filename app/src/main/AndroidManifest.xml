@@ -20,7 +20,7 @@
         <receiver
             android:name=".todo.AlarmReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".todo.AddActivity"
             android:exported="false"

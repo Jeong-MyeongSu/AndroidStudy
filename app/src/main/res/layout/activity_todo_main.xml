@@ -18,7 +18,7 @@
             android:id="@+id/btn_back_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text = "◀"
+            android:text = "@string/btn_todo_main_back"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:paddingStart="10dp"
@@ -35,26 +35,14 @@
             android:paddingEnd="10dp"
             android:layout_marginTop="1dp"
             android:textSize="@dimen/lg"
-            android:text="TODO"
+            android:text="@string/text_main_title_todo"
             android:textColor="@color/black"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_editing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="편집"
-            app:backgroundTint="@color/main2_color"
-            app:strokeColor="@color/white"
-            app:strokeWidth="1dp"
-            android:layout_marginLeft="200dp"
-            android:visibility="gone"/>
 
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_todo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
@@ -63,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Todo"
+        android:text="@string/todo"
         app:icon="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

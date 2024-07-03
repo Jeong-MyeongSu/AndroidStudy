@@ -42,13 +42,10 @@ import java.util.TimeZone
 class AddActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddBinding
     private var mId = -1
-    private var mmillisecond = 0L
+    private var mMillisecond = 0L
     private var alarmSwitch = 0
-    val calendar by lazy {
-        Calendar.getInstance().apply {
-            timeInMillis = mmillisecond
-        }
-    }
+    private lateinit var calendar: Calendar
+
 
     private lateinit var dbInstance: TodoDao
 
@@ -61,14 +58,17 @@ class AddActivity : AppCompatActivity() {
         dbInstance = DataBaseInit().getTodoDao(this)
 
         mId = intent.getIntExtra(RESULT_KEY_ID, DEFAULT_VALUE)
-        mmillisecond = intent.getLongExtra(RESULT_KEY_MILLISECOND, DEFAULT_VALUE.toLong())
+        mMillisecond = intent.getLongExtra(RESULT_KEY_MILLISECOND, DEFAULT_VALUE.toLong())
         alarmSwitch = intent.getIntExtra(RESULT_KEY_ALARM_SWITCH, DEFAULT_VALUE_ALARM)
 
         val mTodo= if (mId != -1) dbInstance.getTodoById(mId) else null
         if (mTodo != null) {
-            mmillisecond = mTodo.millisecond
-            alarmSwitch = mTodo.alramSwitch
+            mMillisecond = mTodo.millisecond
+            alarmSwitch = mTodo.alarmSwitch
 
+        }
+        calendar = Calendar.getInstance().apply{
+            timeInMillis = mMillisecond
         }
         settingBinding(mTodo)
     }
@@ -107,7 +107,7 @@ class AddActivity : AppCompatActivity() {
         val constraintsBuilder = CalendarConstraints.Builder()
             .setStart(todayTimeInMillis) // 최소 날짜 설정: 오늘 날짜
             .setEnd(tomorrowTimeInMillis + (1000 * 60 * 60 * 24 * 365L)) // 최대 날짜 설정: 1년 후
-            .setValidator(DateValidatorPointForward.now()) // 오늘 이후 날짜만 선택 가능하도록 설정
+            .setValidator(DateValidatorPointForward.now()) // 오늘 이후 날짜만 선택 가능 하도록 설정
             .build()
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -146,7 +146,7 @@ class AddActivity : AppCompatActivity() {
             editText.setText(formattedTime)
         }
     }
-/* 뒤로가기 버튼*/
+/* 뒤로 가기 버튼*/
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             setResult(Activity.RESULT_OK, intent)
@@ -154,7 +154,7 @@ class AddActivity : AppCompatActivity() {
         }
     }
 
-/* 버튼 TEXT 및 버튼 클릭 인터페이스 */
+/* 버튼 TEXT 및 버튼 클릭 interface */
     @SuppressLint("SetTextI18n")
     private fun settingBinding(mTodo: Todo?){
         binding.editTextTitleAdd.setText(mTodo?.title)

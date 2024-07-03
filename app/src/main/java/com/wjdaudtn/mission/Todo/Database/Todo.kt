@@ -10,7 +10,7 @@ class Todo (
     var title: String = "",
     var content: String = "",
     var millisecond: Long = 0,
-    var alramSwitch: Int = 0,
+    var alarmSwitch: Int = 0,
 )
 
 

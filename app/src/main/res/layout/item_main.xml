@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/item_day_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/image_alarm"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/bell_alarm"
-            android:padding="5dp" />
-
-        <TextView
-            android:id="@+id/item_day_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:textSize="@dimen/sm"
-            tools:text="3:00 6월 29일(토)" />
-    </LinearLayout>
+        android:layout_margin="5dp"
+        android:drawablePadding="5dp"
+        android:padding="5dp"
+        android:textSize="@dimen/sm"
+        android:textColor="@color/black"
+        android:background="#FEF7FF"
+        app:drawableStartCompat="@drawable/bell_alarm"
+        tools:text="3:00 6월 29일(토)"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +46,7 @@
             android:textColor="@color/high_gray"
             android:textSize="@dimen/md"
             android:textStyle="bold"
-            tools:text="testdfdfdffdfdfdffdfdfdfdfdfd123123123123fdfdfdf" />
+            tools:text="김치" />
     </LinearLayout>
 
 

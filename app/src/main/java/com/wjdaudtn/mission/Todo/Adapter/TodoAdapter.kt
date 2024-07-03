@@ -7,6 +7,7 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.PopupMenu
@@ -71,7 +72,12 @@ class TodoAdapter(
             val formattedDate = formatDateTime(itemCalendar.timeInMillis)
             binding.itemDayTime.text = formattedDate
 
-            if (item.alramSwitch == 1) {
+            /* compound drawable 에서 그림 부분 크기 수정 */
+            val drawable = ContextCompat.getDrawable(activity, R.drawable.bell_alarm)
+            drawable?.setBounds(0, 0, 52, 52) // 원하는 크기로 설정
+            binding.itemDayTime.setCompoundDrawables(drawable, null, null, null)
+
+            if (item.alarmSwitch == 1) {
                 val timeDifference = itemCalendar.timeInMillis - currentCalendar.timeInMillis
                 val minutesLeft = timeDifference / 60_000
 
@@ -82,12 +88,14 @@ class TodoAdapter(
                     else -> Color.BLACK
                 }
                 binding.itemDayTime.setTextColor(textColor)
-                binding.imageAlarm.setTransitionVisibility(View.VISIBLE)
+                setDrawableVisibility(binding.itemDayTime, true) //compound drawable 로 인한 visible 설정 함수
+
             } else {
                 val colorHighGray =
                     ContextCompat.getColor(holder.itemView.context, R.color.high_gray)//방법2
                 binding.itemDayTime.setTextColor(colorHighGray)
-                binding.imageAlarm.setTransitionVisibility(View.INVISIBLE)
+                setDrawableVisibility(binding.itemDayTime, false)
+
             }
 
             binding.root.setOnLongClickListener {
@@ -139,7 +147,7 @@ class TodoAdapter(
                 value.title = item.title
                 value.content = item.content
                 value.millisecond = item.millisecond
-                value.alramSwitch = item.alramSwitch
+                value.alarmSwitch = item.alarmSwitch
                 sameIndex = index
             }
         }
@@ -178,6 +186,20 @@ class TodoAdapter(
             val sdf = SimpleDateFormat(FORMAT_PATTEN_DATE, Locale.KOREA)
             sdf.timeZone = calendar.timeZone
             sdf.format(calendar.time)
+        }
+    }
+
+    //compound drawable 그림만 visible 설정
+    private fun setDrawableVisibility(textView: TextView, visible: Boolean) {
+        val drawable = ContextCompat.getDrawable(textView.context, R.drawable.bell_alarm)?.apply {
+            setBounds(0, 0, 52, 52) // 원하는 크기로 설정
+        }
+        if (visible) {
+            // Make drawable visible
+            textView.setCompoundDrawables(drawable, null, null, null)
+        } else {
+            // Make drawable invisible by setting it to null
+            textView.setCompoundDrawables(null, null, null, null)
         }
     }
 }
