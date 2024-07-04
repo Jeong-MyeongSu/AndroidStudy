@@ -37,7 +37,7 @@ import java.util.TimeZone
 class TodoViewHolder(val binding: ItemMainBinding) : RecyclerView.ViewHolder(binding.root)
 
 class TodoAdapter(
-    private var todoList: MutableList<Todo>,
+    private var todoList: MutableList<Todo>?,
     private val requestLauncher: ActivityResultLauncher<Intent>,
     private val activity: TodoMainActivity
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
