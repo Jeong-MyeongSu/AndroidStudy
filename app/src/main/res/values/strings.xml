@@ -1,5 +1,20 @@
 <resources>
     <string name="app_name">Mission</string>
+    <string name="btn_back">◀</string>
+    <string name="title_todo">TODO</string>
+    <string name="btn_save_text">저 장</string>
+    <string name="text_title">제목</string>
+    <string name="hint_text_content">내용</string>
+    <string name="alarm_text">알 람</string>
+    <string name="yyyy_dd_mm">YYYY/DD/MM</string>
+    <string name="time">time</string>
+    <string name="btn_todo_main_back">◀</string>
+    <string name="text_main_title_todo">TODO</string>
+    <string name="todo">Todo</string>
+    <string name="recyclerview">RecyclerView - 뷰 홀더 두개 혼용해서 보여주기</string>
+    <string name="todo_project">TODO project - 할 일 어플리케이션 프로젝트</string>
+    <string name="change">수정</string>
+    <string name="delete">삭제</string>
     <dimen name="sm">14sp</dimen>
     <dimen name="md">18sp</dimen>
     <dimen name="lg">24sp</dimen>

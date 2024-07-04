@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.PopupMenu
@@ -55,8 +57,6 @@ class TodoAdapter(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as TodoViewHolder).binding
         todoList.let {
@@ -71,7 +71,12 @@ class TodoAdapter(
             val formattedDate = formatDateTime(itemCalendar.timeInMillis)
             binding.itemDayTime.text = formattedDate
 
-            if (item.alramSwitch == 1) {
+            /* compound drawable 에서 그림 부분 크기 수정 */
+            val drawable = ContextCompat.getDrawable(activity, R.drawable.bell_alarm)
+            drawable?.setBounds(0, 0, 52, 52) // 원하는 크기로 설정
+            binding.itemDayTime.setCompoundDrawables(drawable, null, null, null)
+
+            if (item.alarmSwitch == 1) {
                 val timeDifference = itemCalendar.timeInMillis - currentCalendar.timeInMillis
                 val minutesLeft = timeDifference / 60_000
 
@@ -82,12 +87,14 @@ class TodoAdapter(
                     else -> Color.BLACK
                 }
                 binding.itemDayTime.setTextColor(textColor)
-                binding.imageAlarm.setTransitionVisibility(View.VISIBLE)
+                setDrawableVisibility(binding.itemDayTime, true) //compound drawable 로 인한 visible 설정 함수
+
             } else {
                 val colorHighGray =
                     ContextCompat.getColor(holder.itemView.context, R.color.high_gray)//방법2
                 binding.itemDayTime.setTextColor(colorHighGray)
-                binding.imageAlarm.setTransitionVisibility(View.INVISIBLE)
+                setDrawableVisibility(binding.itemDayTime, false)
+
             }
 
             binding.root.setOnLongClickListener {
@@ -139,37 +146,58 @@ class TodoAdapter(
                 value.title = item.title
                 value.content = item.content
                 value.millisecond = item.millisecond
-                value.alramSwitch = item.alramSwitch
+                value.alarmSwitch = item.alarmSwitch
                 sameIndex = index
             }
         }
         notifyItemChanged(sameIndex)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+
     private fun deleteItem(todoItem: Todo) {
         activity.cancelAlarm(todoItem)
         dbInstance.setDeleteTodo(todoItem)
         todoList.remove(todoItem)
-        notifyDataSetChanged()
+        val position = todoList.indexOf(todoItem)
+        if (position != -1) { //이론상 포지션 으로 지울 때는 Removed 를 사용 해야 하지만 database 의 PrimaryKey 로 지우기 때문에 else 문만 사용 된다.
+            todoList.removeAt(position)
+            notifyItemRemoved(position)
+        } else {
+            // 항목이 목록에 없는 경우 예외 처리를 할 수 있습니다.
+            notifyDataSetChanged()  // fallback
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    fun formatDateTime(milliseconds: Long): String {
+
+
+    private fun formatDateTime(milliseconds: Long): String {
         val currentMillis = Calendar.getInstance().timeInMillis
         val calendar = Calendar.getInstance(TimeZone.getTimeZone(ASIA), Locale.KOREA)
         calendar.timeInMillis = milliseconds
         val itemMillis = calendar.timeInMillis
 
-        //api 34버전 이상 시간 비교 클래스
-        val isSameDay =
-            LocalDate.ofInstant(Instant.ofEpochMilli(currentMillis), ZoneId.systemDefault())
+        val isSameDay: Boolean
+        if (Build.VERSION.SDK_INT >= 34) {
+            // API 26 이상 에서는 LocalDate 를 사용 하여 날짜 비교
+            isSameDay = LocalDate.ofInstant(Instant.ofEpochMilli(currentMillis), ZoneId.systemDefault())
                 .isEqual(
                     LocalDate.ofInstant(
                         Instant.ofEpochMilli(itemMillis),
                         ZoneId.systemDefault()
                     )
                 )
+        } else {
+            // API 34미만 에서는 Calendar 클래스 를 사용 하여 날짜 비교
+            val currentCalendar = Calendar.getInstance()
+            currentCalendar.timeInMillis = currentMillis
+
+            val itemCalendar = Calendar.getInstance()
+            itemCalendar.timeInMillis = itemMillis
+
+            isSameDay = currentCalendar.get(Calendar.YEAR) == itemCalendar.get(Calendar.YEAR) &&
+                    currentCalendar.get(Calendar.DAY_OF_YEAR) == itemCalendar.get(Calendar.DAY_OF_YEAR)
+        }
+
         return if (isSameDay) { //오늘 이면 Today 아니면 날짜 마지막 문장이 return
             val sdf = SimpleDateFormat(FORMAT_PATTEN_TODAY, Locale.KOREA)
             sdf.timeZone = calendar.timeZone
@@ -178,6 +206,20 @@ class TodoAdapter(
             val sdf = SimpleDateFormat(FORMAT_PATTEN_DATE, Locale.KOREA)
             sdf.timeZone = calendar.timeZone
             sdf.format(calendar.time)
+        }
+    }
+
+    //compound drawable 그림만 visible 설정
+    private fun setDrawableVisibility(textView: TextView, visible: Boolean) {
+        val drawable = ContextCompat.getDrawable(textView.context, R.drawable.bell_alarm)?.apply {
+            setBounds(0, 0, 52, 52) // 원하는 크기로 설정
+        }
+        if (visible) {
+            // Make drawable visible
+            textView.setCompoundDrawables(drawable, null, null, null)
+        } else {
+            // Make drawable invisible by setting it to null
+            textView.setCompoundDrawables(null, null, null, null)
         }
     }
 }

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="main_color">#F2ECEE</color>
-    <color name="main2_color">#DED8DA</color>
-    <color name="second_color">#F2E0E4</color>
-    <color name="second2_color">#F2F2F2</color>
+<!--    <color name="main2_color">#DED8DA</color>-->
+<!--    <color name="second_color">#F2E0E4</color>-->
+<!--    <color name="second2_color">#F2F2F2</color>-->
     <color name="deep_color">#0A122A</color>
     <color name="black">#FF000000</color>
     <color name="low_gray">#E6E6E6</color>
     <color name="high_gray">#848484</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="purple">#800080</color>
 </resources>

@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:padding="10dp"
-            android:text="◀"
+            android:text="@string/btn_back"
             android:textColor="@color/high_gray"
             android:textSize="@dimen/lg" />
 
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:padding="10dp"
-            android:text="TODO"
+            android:text="@string/title_todo"
             android:textColor="@color/black"
             android:textSize="@dimen/lg" />
 
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main_color"
-            android:text="저 장"
+            android:text="@string/btn_save_text"
             android:textColor="@color/black"
             android:textSize="@dimen/md"
             app:cornerRadius="30dp"
@@ -54,7 +54,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="제목"
+        android:hint="@string/text_title"
         android:maxLength="20"
         android:textColor="@color/high_gray"
         android:textSize="@dimen/sm"
@@ -63,7 +63,7 @@
         app:boxStrokeColor="@color/black"
         app:boxStrokeWidth="1dp"
         app:boxStrokeWidthFocused="2dp"
-        app:helperText="제목을 적어주세요"
+        app:helperText="제목을 적어 주세요"
         app:helperTextTextColor="@color/low_gray"
         app:hintTextColor="@color/high_gray"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,13 +85,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="내용"
+        android:hint="@string/hint_text_content"
         app:boxBackgroundColor="@color/low_gray"
         app:boxBackgroundMode="outline"
         app:boxStrokeColor="@color/black"
         app:boxStrokeWidth="1dp"
         app:boxStrokeWidthFocused="2dp"
-        app:helperText="내용을 적어주세요"
+        app:helperText="내용을 적어 주세요"
         app:helperTextTextColor="@color/low_gray"
         app:hintTextColor="@color/high_gray"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="알 람 "
+        android:text="@string/alarm_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_content_layout" />
 
@@ -123,10 +123,11 @@
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:hint="YYYY/DD/MM"
+        android:hint="@string/yyyy_dd_mm"
         android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_layout">
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_content_layout"
+        tools:ignore="RtlSymmetry">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/btn_date"
@@ -140,10 +141,11 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:hint="time"
+        android:hint="@string/time"
         android:paddingEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_Layout">
+        app:layout_constraintTop_toBottomOf="@+id/date_Layout"
+        tools:ignore="RtlSymmetry">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/btn_time"

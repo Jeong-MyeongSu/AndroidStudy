@@ -37,7 +37,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         notificationManager.notify(0, notification)
 
-        // 알람이 울렸다는 브로드캐스트 전송
+        // 알람이 울렸 다는 broadCast 전송
         val alarmIntent = Intent(ALARM_RECEIVER_ACTION)
         alarmIntent.putExtra(RESULT_KEY_ID, intent.getIntExtra(RESULT_KEY_ID, DEFAULT_VALUE))
         LocalBroadcastManager.getInstance(context).sendBroadcast(alarmIntent)

@@ -9,19 +9,19 @@ import com.wjdaudtn.mission.todo.TodoMainActivity
 import com.wjdaudtn.mission.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.tvRecyclerSample1.setOnClickListener(MyOnClickListener)
-        binding.goTodo.setOnClickListener(MyOnClickListener)
+        binding.tvRecyclerSample1.setOnClickListener(customOnclickListener)
+        binding.goTodo.setOnClickListener(customOnclickListener)
     }
-    private val MyOnClickListener: View.OnClickListener = (object:View.OnClickListener{
+    private val customOnclickListener: View.OnClickListener = (object:View.OnClickListener{
         override fun onClick(v: View?) {
             if(v == null){
-                return;
+                return
             }
             when(v.id){
                 R.id.tv_recycler_sample_1 -> {

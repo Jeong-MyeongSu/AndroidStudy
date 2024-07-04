@@ -7,7 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-public interface TodoDao {
+interface TodoDao {
 
     @Insert
     fun setInsertTodo(todo:Todo): Long
