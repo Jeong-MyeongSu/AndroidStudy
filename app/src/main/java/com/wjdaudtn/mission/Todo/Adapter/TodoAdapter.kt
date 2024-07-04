@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -154,6 +152,7 @@ class TodoAdapter(
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun deleteItem(todoItem: Todo) {
         activity.cancelAlarm(todoItem)
         dbInstance.setDeleteTodo(todoItem)
@@ -163,7 +162,7 @@ class TodoAdapter(
             todoList.removeAt(position)
             notifyItemRemoved(position)
         } else {
-            // 항목이 목록에 없는 경우 예외 처리를 할 수 있습니다.
+            // 항목이 목록에 없는 경우 예외 처리를 할 수 있다.
             notifyDataSetChanged()  // fallback
         }
     }
@@ -178,7 +177,7 @@ class TodoAdapter(
 
         val isSameDay: Boolean
         if (Build.VERSION.SDK_INT >= 34) {
-            // API 26 이상 에서는 LocalDate 를 사용 하여 날짜 비교
+            // API 34 이상 에서는 LocalDate 를 사용 하여 날짜 비교
             isSameDay = LocalDate.ofInstant(Instant.ofEpochMilli(currentMillis), ZoneId.systemDefault())
                 .isEqual(
                     LocalDate.ofInstant(
