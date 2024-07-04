@@ -55,6 +55,7 @@ class AddActivity : AppCompatActivity() {
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         dbInstance = DataBaseInit().getTodoDao(this)
 
         mId = intent.getIntExtra(RESULT_KEY_ID, DEFAULT_VALUE)
