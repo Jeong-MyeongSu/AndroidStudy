@@ -162,9 +162,6 @@ class AddActivity : AppCompatActivity() {
 /* 뒤로 가기 버튼*/
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-
-
-
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
