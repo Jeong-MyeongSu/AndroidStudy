@@ -49,7 +49,7 @@ class AddActivity : AppCompatActivity() {
 
     private lateinit var dbInstance: TodoDao
 
-    @SuppressLint("SetTextI18n")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddBinding.inflate(layoutInflater)
@@ -155,6 +155,7 @@ class AddActivity : AppCompatActivity() {
     }
 
 /* 버튼 TEXT 및 버튼 클릭 interface */
+
     @SuppressLint("SetTextI18n")
     private fun settingBinding(mTodo: Todo?){
         binding.editTextTitleAdd.setText(mTodo?.title)

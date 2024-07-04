@@ -56,7 +56,7 @@ class TodoMainActivity : AppCompatActivity() {
         initView()
     }
 
-    //api30이상 미만 에서는 startActivityForResult, onActivityResult
+
     private val requestLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -126,10 +126,8 @@ class TodoMainActivity : AppCompatActivity() {
                     this@TodoMainActivity.baseContext,
                     AddActivity::class.java
                 )
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    todayMillisecond = Calendar.getInstance().timeInMillis
-                    intent.putExtra(RESULT_KEY_MILLISECOND, todayMillisecond)
-                }
+                todayMillisecond = Calendar.getInstance().timeInMillis
+                intent.putExtra(RESULT_KEY_MILLISECOND, todayMillisecond)
                 requestLauncher.launch(intent)
             }
 
