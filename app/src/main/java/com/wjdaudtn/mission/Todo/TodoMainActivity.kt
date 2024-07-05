@@ -153,7 +153,7 @@ class TodoMainActivity : AppCompatActivity() {
             setAlarm(todo)
         }
     }
-
+    
     private fun setAlarm(todo: Todo) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(applicationContext, AlarmReceiver::class.java).apply {
@@ -174,6 +174,10 @@ class TodoMainActivity : AppCompatActivity() {
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 
+
+    /**
+     *
+     */
     fun cancelAlarm(todo: Todo) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(applicationContext, AlarmReceiver::class.java)
