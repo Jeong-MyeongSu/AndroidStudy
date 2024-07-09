@@ -7,44 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".todo.TodoMainActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/todo_main_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="@color/main_color"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
-        <TextView
-            android:id="@+id/btn_back_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text = "@string/btn_todo_main_back"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:layout_marginTop="1dp"
-            android:textColor="@color/high_gray"
-            android:textSize="@dimen/lg"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:layout_marginTop="1dp"
-            android:textSize="@dimen/lg"
-            android:text="@string/text_main_title_todo"
-            android:textColor="@color/black"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_todo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@id/todo_main_toolbar" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btn_todo"
