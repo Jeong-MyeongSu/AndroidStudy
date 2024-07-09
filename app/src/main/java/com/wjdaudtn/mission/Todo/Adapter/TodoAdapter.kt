@@ -5,16 +5,13 @@ import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.wjdaudtn.mission.R
 import com.wjdaudtn.mission.databinding.ItemMainBinding
-import com.wjdaudtn.mission.todo.AddActivity
 import com.wjdaudtn.mission.todo.DataBaseInit
 import com.wjdaudtn.mission.todo.TodoMainActivity
 import com.wjdaudtn.mission.todo.database.Todo
@@ -25,7 +22,6 @@ import com.wjdaudtn.mission.todo.util.Const.Companion.FORMAT_PATTEN_DATE
 import com.wjdaudtn.mission.todo.util.Const.Companion.FORMAT_PATTEN_TODAY
 import com.wjdaudtn.mission.todo.util.Const.Companion.HIGH_GRAY
 import com.wjdaudtn.mission.todo.util.Const.Companion.ORANGE
-import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_ID
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
