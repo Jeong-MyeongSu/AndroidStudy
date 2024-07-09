@@ -4,10 +4,16 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.marginEnd
+import androidx.core.view.marginRight
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -71,6 +77,40 @@ class AddActivity : AppCompatActivity() {
         }
         settingBinding(mTodo)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuItem1: MenuItem? = menu?.add(0, 0, 0, "저장")
+        menuItem1?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+
+//         커스텀 텍스트뷰 생성
+//        val textView = TextView(this).apply {
+//            text = "저장"
+//            setPadding(16, 8, 16, 8)
+//            setBackgroundResource(R.drawable.toolbar_menu_item_background)
+//            setTextColor(getColor(android.R.color.black))
+//        }
+//        val textView = findViewById<TextView>(R.id.menu_item_text) //이거 왜 잘 안될까??
+
+//        // 메뉴 항목에 커스텀 뷰 적용
+//        menuItem1?.actionView = textView
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // 업 버튼 클릭 시 뒤로 가기 동작 정의
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            0 -> {
+                saveTodo()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
 /* 저장 버튼 눌렀을 때 */
     private fun saveTodo() {
         val currentCalendar = Calendar.getInstance()
@@ -162,9 +202,6 @@ class AddActivity : AppCompatActivity() {
         binding.btnDate.setText("${calendar.get(Calendar.YEAR)} 년 ${calendar.get(Calendar.MONTH) + 1} 월 ${calendar.get(Calendar.DAY_OF_MONTH)} 일")
         binding.btnTime.setText("${if(calendar.get(Calendar.AM_PM) == Calendar.AM) "오전" else "오후"} ${calendar.get(Calendar.HOUR)}시 ${calendar.get(Calendar.MINUTE)}분")
         binding.btnSwitch.isChecked = alarmSwitch == 1 //1이면 true 아니면 false
-
-        binding.btnSave.setOnClickListener(customClickListener)
-        binding.btnBackTodo.setOnClickListener(customClickListener)
         binding.btnDate.setOnClickListener(customClickListener)
         binding.btnTime.setOnClickListener(customClickListener)
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
@@ -172,17 +209,30 @@ class AddActivity : AppCompatActivity() {
             alarmSwitch = if (isChecked) 1 else 0
             Log.d("alarm", "$alarmSwitch")
         }
+
+        //ToolBar
+        setSupportActionBar(binding.todoMainToolbar)
+        /**
+         *         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+         *         supportActionBar?.setDisplayShowHomeEnabled(true)
+         */
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            title = "Todo"
+        }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // 뒤로 가기 동작 정의
+                finish()
+            }
+        })
     }
 
     private val customClickListener: View.OnClickListener = (View.OnClickListener { v ->
         when (v.id) {
-            R.id.btn_save -> saveTodo()
             R.id.btn_date -> showDatePicker(binding.btnDate)
             R.id.btn_time -> showTimePicker(binding.btnTime)
-            R.id.btn_back_todo -> {
-                setResult(Activity.RESULT_OK, intent)
-                finish()
-            }
         }
     })
 }

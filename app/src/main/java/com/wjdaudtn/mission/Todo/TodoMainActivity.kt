@@ -7,8 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +55,17 @@ class TodoMainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         initView()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // 업 버튼 클릭 시 뒤로 가기 동작 정의
+                onBackPressedDispatcher.onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 
@@ -130,7 +143,6 @@ class TodoMainActivity : AppCompatActivity() {
                 requestLauncher.launch(intent)
             }
 
-            R.id.btn_back_main -> finish()
         }
     })
 
@@ -196,7 +208,24 @@ class TodoMainActivity : AppCompatActivity() {
             DividerItemDecoration(baseContext, layoutManager.orientation)
         binding.recyclerviewTodo.addItemDecoration(dividerItemDecoration)
         binding.btnTodo.setOnClickListener(customClickListener)
-        binding.btnBackMain.setOnClickListener(customClickListener)
+
+        //ToolBar
+        setSupportActionBar(binding.todoMainToolbar)
+        /**
+         *         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+         *         supportActionBar?.setDisplayShowHomeEnabled(true)
+         */
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
+        // OnBackPressedDispatcher를 사용하여 뒤로 가기 동작을 처리
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // 뒤로 가기 동작 정의
+                finish()
+            }
+        })
 
     }
 

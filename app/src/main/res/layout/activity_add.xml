@@ -7,45 +7,53 @@
     android:layout_height="match_parent"
     tools:context=".todo.AddActivity">
 
-    <LinearLayout
-        android:id="@+id/app_bar_add"
+<!--    <LinearLayout-->
+<!--        android:id="@+id/app_bar_add"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:background="@color/main_color"-->
+<!--        android:orientation="horizontal"-->
+<!--        tools:ignore="MissingConstraints">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/btn_back_todo"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="1dp"-->
+<!--            android:padding="10dp"-->
+<!--            android:text="@string/btn_back"-->
+<!--            android:textColor="@color/high_gray"-->
+<!--            android:textSize="@dimen/lg" />-->
+
+<!--        <TextView-->
+<!--            android:layout_width="270dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="1dp"-->
+<!--            android:padding="10dp"-->
+<!--            android:text="@string/title_todo"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/lg" />-->
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btn_save"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:backgroundTint="@color/main_color"-->
+<!--            android:text="@string/btn_save_text"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/md"-->
+<!--            app:cornerRadius="30dp"-->
+<!--            app:strokeColor="@color/high_gray"-->
+<!--            app:strokeWidth="1dp" />-->
+<!--    </LinearLayout>-->
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/todo_main_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="@color/main_color"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints">
-
-        <TextView
-            android:id="@+id/btn_back_todo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:padding="10dp"
-            android:text="@string/btn_back"
-            android:textColor="@color/high_gray"
-            android:textSize="@dimen/lg" />
-
-        <TextView
-            android:layout_width="270dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:padding="10dp"
-            android:text="@string/title_todo"
-            android:textColor="@color/black"
-            android:textSize="@dimen/lg" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/main_color"
-            android:text="@string/btn_save_text"
-            android:textColor="@color/black"
-            android:textSize="@dimen/md"
-            app:cornerRadius="30dp"
-            app:strokeColor="@color/high_gray"
-            app:strokeWidth="1dp" />
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/edit_text_title_layout"
@@ -67,7 +75,7 @@
         app:helperTextTextColor="@color/low_gray"
         app:hintTextColor="@color/high_gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar_add">
+        app:layout_constraintTop_toBottomOf="@id/todo_main_toolbar">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_title_add"
