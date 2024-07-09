@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -57,7 +58,7 @@ class TodoMainActivity : AppCompatActivity() {
     }
 
 
-    private val requestLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+    val requestLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         val data = result.data
@@ -126,7 +127,7 @@ class TodoMainActivity : AppCompatActivity() {
                     this@TodoMainActivity.baseContext,
                     AddActivity::class.java
                 )
-                todayMillisecond = Calendar.getInstance().timeInMillis
+                todayMillisecond = Calendar.getInstance().timeInMillis + 1000 * 60 * 60
                 intent.putExtra(RESULT_KEY_MILLISECOND, todayMillisecond)
                 requestLauncher.launch(intent)
             }
@@ -198,5 +199,7 @@ class TodoMainActivity : AppCompatActivity() {
         binding.recyclerviewTodo.addItemDecoration(dividerItemDecoration)
         binding.btnTodo.setOnClickListener(customClickListener)
         binding.btnBackMain.setOnClickListener(customClickListener)
+
     }
+
 }

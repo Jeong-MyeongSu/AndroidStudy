@@ -61,20 +61,7 @@ class AddActivity : AppCompatActivity() {
 
         val mTodo= if (mId != -1) dbInstance.getTodoById(mId) else null
         if (mTodo != null) {
-            mMillisecond = mTodo.millisecond
-            alarmSwitch = mTodo.alarmSwitch
 
-        }
-        calendar = Calendar.getInstance().apply{
-            timeInMillis = mMillisecond
-        }
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val mTodo= if (mId != -1) dbInstance.getTodoById(mId) else null
-        if (mTodo != null) {
             mMillisecond = mTodo.millisecond
             alarmSwitch = mTodo.alarmSwitch
 
@@ -84,7 +71,6 @@ class AddActivity : AppCompatActivity() {
         }
         settingBinding(mTodo)
     }
-
 /* 저장 버튼 눌렀을 때 */
     private fun saveTodo() {
         val currentCalendar = Calendar.getInstance()

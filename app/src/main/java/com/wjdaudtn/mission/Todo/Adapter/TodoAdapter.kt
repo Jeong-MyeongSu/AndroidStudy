@@ -1,6 +1,5 @@
 package com.wjdaudtn.mission.todo.adapter
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +19,7 @@ import com.wjdaudtn.mission.todo.DataBaseInit
 import com.wjdaudtn.mission.todo.TodoMainActivity
 import com.wjdaudtn.mission.todo.database.Todo
 import com.wjdaudtn.mission.todo.database.TodoDao
+import com.wjdaudtn.mission.todo.dialog_bottom_sheet.MyDialogBottomSheet
 import com.wjdaudtn.mission.todo.util.Const.Companion.ASIA
 import com.wjdaudtn.mission.todo.util.Const.Companion.FORMAT_PATTEN_DATE
 import com.wjdaudtn.mission.todo.util.Const.Companion.FORMAT_PATTEN_TODAY
@@ -47,7 +46,10 @@ class TodoAdapter(
     private var dbInstance: TodoDao = DataBaseInit().getTodoDao(activity.baseContext)
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {  //뷰 타입에 맞춰 뷰홀더 만듬
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerView.ViewHolder {  //뷰 타입에 맞춰 뷰홀더 만듬
         return TodoViewHolder(
             ItemMainBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -87,7 +89,10 @@ class TodoAdapter(
                     else -> Color.BLACK
                 }
                 binding.itemDayTime.setTextColor(textColor)
-                setDrawableVisibility(binding.itemDayTime, true) //compound drawable 로 인한 visible 설정 함수
+                setDrawableVisibility(
+                    binding.itemDayTime,
+                    true
+                ) //compound drawable 로 인한 visible 설정 함수
 
             } else {
                 val colorHighGray =
@@ -99,7 +104,34 @@ class TodoAdapter(
 
             binding.root.setOnLongClickListener {
 //                Log.d("delete1", "$position, ${todoList.size}, ${dbInstance.getTodoAll().size}")
-                showPopupMenu(binding.root, position)
+//                showPopupMenu(binding.root, position)
+                Log.d("item.id", "${item.id}")
+
+                MyDialogBottomSheet.newInstance(item.id, object: MyDialogBottomSheet.OnDeleteListener {
+                    override fun success(item: Todo) {
+                        // 성공 처리
+
+                        Log.d(javaClass.simpleName, "success()")
+                        deleteItem(item)
+                    }
+
+                    override fun fail() {
+                        // 실패 처리
+                        Log.d(javaClass.simpleName, "fail()")
+                    }
+
+                    override fun finish(state: MyDialogBottomSheet.E_STUTS, item: Todo?) {
+
+                        if (MyDialogBottomSheet.E_STUTS.SUCCESS == state){
+                            Log.d(javaClass.simpleName, "success()")
+                            deleteItem(item!!)
+                        } else if (MyDialogBottomSheet.E_STUTS.FAIL == state){
+                            Log.d(javaClass.simpleName, "fail()")
+                        }
+                    }
+
+                })
+                    .show(activity.supportFragmentManager, "MyDialogBottomSheet")
                 true
             }
         }
@@ -109,30 +141,30 @@ class TodoAdapter(
         return todoList.size
     }
 
-    private fun showPopupMenu(view: View, position: Int) {
-        val popupMenu = PopupMenu(view.context, view)
-        val todoItem = todoList[position]
-
-        popupMenu.inflate(R.menu.menu_list)
-        popupMenu.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.item_change -> {
-                    val intent = Intent(view.context, AddActivity::class.java)
-                    intent.putExtra(RESULT_KEY_ID, todoItem.id)
-                    requestLauncher.launch(intent)
-                    true
-                }
-
-                R.id.item_delete -> {
-                    deleteItem(todoItem)
-                    true
-                }
-
-                else -> false
-            }
-        }
-        popupMenu.show()
-    }
+//    private fun showPopupMenu(view: View, position: Int) {
+//        val popupMenu = PopupMenu(view.context, view)
+//        val todoItem = todoList[position]
+//
+//        popupMenu.inflate(R.menu.bottom_nav_menu)
+//        popupMenu.setOnMenuItemClickListener { menuItem ->
+//            when (menuItem.itemId) {
+//                R.id.item_change -> {
+//                    val intent = Intent(view.context, AddActivity::class.java)
+//                    intent.putExtra(RESULT_KEY_ID, todoItem.id)
+//                    requestLauncher.launch(intent)
+//                    true
+//                }
+//
+//                R.id.item_delete -> {
+//                    deleteItem(todoItem)
+//                    true
+//                }
+//
+//                else -> false
+//            }
+//        }
+//        popupMenu.show()
+//    }
 
     fun addItem(item: Todo) {
         todoList.add(item)
@@ -154,12 +186,18 @@ class TodoAdapter(
     }
 
 
-    private fun deleteItem(todoItem: Todo) {
+    fun deleteItem(todoItem: Todo) {
+        var position = todoList.indexOf(todoItem)
+
+        for ((index, value) in todoList.withIndex()) {
+            if (value.id == todoItem.id) {
+                position = index
+            }
+        }
+
         activity.cancelAlarm(todoItem)
-        dbInstance.setDeleteTodo(todoItem)
         todoList.remove(todoItem)
-        val position = todoList.indexOf(todoItem)
-        if (position != -1) { //이론상 포지션 으로 지울 때는 Removed 를 사용 해야 하지만 database 의 PrimaryKey 로 지우기 때문에 else 문만 사용 된다.
+        if (position != -1) {
             todoList.removeAt(position)
             notifyItemRemoved(position)
         } else {
@@ -167,7 +205,6 @@ class TodoAdapter(
             notifyDataSetChanged()  // fallback
         }
     }
-
 
 
     private fun formatDateTime(milliseconds: Long): String {
@@ -179,13 +216,14 @@ class TodoAdapter(
         val isSameDay: Boolean
         if (Build.VERSION.SDK_INT >= 34) {
             // API 26 이상 에서는 LocalDate 를 사용 하여 날짜 비교
-            isSameDay = LocalDate.ofInstant(Instant.ofEpochMilli(currentMillis), ZoneId.systemDefault())
-                .isEqual(
-                    LocalDate.ofInstant(
-                        Instant.ofEpochMilli(itemMillis),
-                        ZoneId.systemDefault()
+            isSameDay =
+                LocalDate.ofInstant(Instant.ofEpochMilli(currentMillis), ZoneId.systemDefault())
+                    .isEqual(
+                        LocalDate.ofInstant(
+                            Instant.ofEpochMilli(itemMillis),
+                            ZoneId.systemDefault()
+                        )
                     )
-                )
         } else {
             // API 34미만 에서는 Calendar 클래스 를 사용 하여 날짜 비교
             val currentCalendar = Calendar.getInstance()
