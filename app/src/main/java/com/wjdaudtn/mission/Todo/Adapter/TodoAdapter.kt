@@ -104,7 +104,6 @@ class TodoAdapter(
 
             binding.root.setOnLongClickListener {
 //                Log.d("delete1", "$position, ${todoList.size}, ${dbInstance.getTodoAll().size}")
-//                showPopupMenu(binding.root, position)
                 Log.d("item.id", "${item.id}")
 
                 MyDialogBottomSheet.newInstance(item.id, object: MyDialogBottomSheet.OnDeleteListener {
@@ -140,31 +139,6 @@ class TodoAdapter(
     override fun getItemCount(): Int {
         return todoList.size
     }
-
-//    private fun showPopupMenu(view: View, position: Int) {
-//        val popupMenu = PopupMenu(view.context, view)
-//        val todoItem = todoList[position]
-//
-//        popupMenu.inflate(R.menu.bottom_nav_menu)
-//        popupMenu.setOnMenuItemClickListener { menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.item_change -> {
-//                    val intent = Intent(view.context, AddActivity::class.java)
-//                    intent.putExtra(RESULT_KEY_ID, todoItem.id)
-//                    requestLauncher.launch(intent)
-//                    true
-//                }
-//
-//                R.id.item_delete -> {
-//                    deleteItem(todoItem)
-//                    true
-//                }
-//
-//                else -> false
-//            }
-//        }
-//        popupMenu.show()
-//    }
 
     fun addItem(item: Todo) {
         todoList.add(item)
