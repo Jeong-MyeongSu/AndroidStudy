@@ -63,6 +63,7 @@ class AddActivity : AppCompatActivity() {
         mMillisecond = intent.getLongExtra(RESULT_KEY_MILLISECOND, DEFAULT_VALUE.toLong())
         alarmSwitch = intent.getIntExtra(RESULT_KEY_ALARM_SWITCH, DEFAULT_VALUE_ALARM)
 
+        
         val mTodo= if (mId != -1) dbInstance.getTodoById(mId) else null
         if (mTodo != null) {
 
