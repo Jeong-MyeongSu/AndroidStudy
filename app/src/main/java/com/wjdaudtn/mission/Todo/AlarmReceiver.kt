@@ -52,7 +52,7 @@ class AlarmReceiver : BroadcastReceiver() {
 //        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
 //            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
 //            notificationManager.createNotificationChannel(channel)
-//            notificationBuilder = NotificationCompat.Builder(context,"ChannelId")
+//            notificationBuilder = NotificationCompat.Builder(context,channelId)
 //        }else{
 //            notificationBuilder = NotificationCompat.Builder(context)
 //        }

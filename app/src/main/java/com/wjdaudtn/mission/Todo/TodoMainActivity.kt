@@ -33,30 +33,30 @@ import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_TITLE
 import java.util.Calendar
 
 class TodoMainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityTodoMainBinding
-    private lateinit var mAdapter: TodoAdapter
-    private var todayMillisecond = Calendar.getInstance().timeInMillis
+    private lateinit var binding: ActivityTodoMainBinding   //activity_todo_main.xml 을 바인딩 하여 뷰 객체를 만들기 위한 객체 생성
+    private lateinit var mAdapter: TodoAdapter  //TodoAdapter 객채 생성
+    private var todayMillisecond = Calendar.getInstance().timeInMillis  //오늘 시간을 캘린더 클래스 로 초기화
 
-    private lateinit var dbInstance: TodoDao
+    private lateinit var dbInstance: TodoDao    //database interface 객체 생성
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityTodoMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreate(savedInstanceState: Bundle?) {    //TodoMainActivity 생명 주기 시작
+        super.onCreate(savedInstanceState)  // TodoMainActivity 기본 초기화 작업 수행, 액티 비티 상태 복원 하여 ui 초기화 작업을 수행 하기 위해 필수로 호출 해야함
+        binding = ActivityTodoMainBinding.inflate(layoutInflater)   // activity_todo_main.xml 뷰 객체 초기화
+        setContentView(binding.root)    // 뷰 객채를 띄움
 
         // database 빌드 및 DAO 초기화
-        dbInstance = DataBaseInit().getTodoDao(applicationContext)
+        dbInstance = DataBaseInit().getTodoDao(applicationContext) //싱글톤 으로 database interface 를 초기화
 
         // Broadcast 수신기
-        LocalBroadcastManager.getInstance(applicationContext)
-            .registerReceiver(alarmReceiver, IntentFilter(ALARM_RECEIVER_ACTION))
+        LocalBroadcastManager.getInstance(applicationContext) // LocalBrodcastManager 인스턴스를 가져옴
+            .registerReceiver(alarmReceiver, IntentFilter(ALARM_RECEIVER_ACTION)) // alarmReceiver를 alarm_reciver_action을 가진 인탠트를 수신하도록 등록
 
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        initView()
+    override fun onResume() { //onCreate 다음 onStart 다음 실행, activity 실행 중 홈을 눌러 onPause(비활성화) 된 후 다시 활성화 될 때 onStop -> onRestart -> onStart -> onResume 순으로 호출
+        super.onResume() //기본 초기화 작업
+        initView() //뷰 데코, 버튼 리스너 등 생성
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -221,7 +221,7 @@ class TodoMainActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
         }
-        // OnBackPressedDispatcher를 사용하여 뒤로 가기 동작을 처리
+        // OnBackPressedCallback 를 사용 하여 뒤로 가기 동작을 처리
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 // 뒤로 가기 동작 정의
