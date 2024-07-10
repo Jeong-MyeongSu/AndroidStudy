@@ -50,6 +50,8 @@ class TodoMainActivity : AppCompatActivity() {
         // Broadcast 수신기
         LocalBroadcastManager.getInstance(applicationContext)
             .registerReceiver(alarmReceiver, IntentFilter(ALARM_RECEIVER_ACTION))
+
+
     }
 
     override fun onResume() {

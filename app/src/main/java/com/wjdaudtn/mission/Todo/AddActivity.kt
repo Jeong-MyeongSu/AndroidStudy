@@ -85,13 +85,13 @@ class AddActivity : AppCompatActivity() {
 //         커스텀 텍스트뷰 생성
 //        val textView = TextView(this).apply {
 //            text = "저장"
-//            setPadding(16, 8, 16, 8)
+//            setPadding(16, 8, 56, 8)
 //            setBackgroundResource(R.drawable.toolbar_menu_item_background)
 //            setTextColor(getColor(android.R.color.black))
 //        }
-//        val textView = findViewById<TextView>(R.id.menu_item_text) //이거 왜 잘 안될까??
+//        val textView = findViewById<TextView>(R.id.menu_item_text) //이거 왜 마진은 설정이 안될까??
 
-//        // 메뉴 항목에 커스텀 뷰 적용
+        // 메뉴 항목에 커스텀 뷰 적용
 //        menuItem1?.actionView = textView
         return true
     }
