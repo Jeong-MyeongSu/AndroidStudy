@@ -11,9 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.marginEnd
-import androidx.core.view.marginRight
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -21,9 +18,10 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.wjdaudtn.mission.R
+import com.wjdaudtn.mission.databinding.ActivityAddBinding
+import com.wjdaudtn.mission.databinding.ToolbarMenuItemBinding
 import com.wjdaudtn.mission.todo.database.Todo
 import com.wjdaudtn.mission.todo.database.TodoDao
-import com.wjdaudtn.mission.databinding.ActivityAddBinding
 import com.wjdaudtn.mission.todo.util.Const.Companion.DATE_PICKER_TAG
 import com.wjdaudtn.mission.todo.util.Const.Companion.DEFAULT_VALUE
 import com.wjdaudtn.mission.todo.util.Const.Companion.DEFAULT_VALUE_ALARM
@@ -82,17 +80,12 @@ class AddActivity : AppCompatActivity() {
         val menuItem1: MenuItem? = menu?.add(0, 0, 0, "저장")
         menuItem1?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
 
-//         커스텀 텍스트뷰 생성
-//        val textView = TextView(this).apply {
-//            text = "저장"
-//            setPadding(16, 8, 56, 8)
-//            setBackgroundResource(R.drawable.toolbar_menu_item_background)
-//            setTextColor(getColor(android.R.color.black))
-//        }
-//        val textView = findViewById<TextView>(R.id.menu_item_text) //이거 왜 마진은 설정이 안될까??
+        val tBinding: ToolbarMenuItemBinding = ToolbarMenuItemBinding.inflate(layoutInflater)
+        tBinding.menuItemText.setOnClickListener(customClickListener)
+
 
         // 메뉴 항목에 커스텀 뷰 적용
-//        menuItem1?.actionView = textView
+        menuItem1?.actionView = tBinding.root
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -233,6 +226,7 @@ class AddActivity : AppCompatActivity() {
         when (v.id) {
             R.id.btn_date -> showDatePicker(binding.btnDate)
             R.id.btn_time -> showTimePicker(binding.btnTime)
+            R.id.menu_item_text -> saveTodo()
         }
     })
 }
