@@ -26,4 +26,26 @@
         android:layout_marginBottom="5dp"
         android:textSize="20sp"/>
 
+    <TextView
+        android:id="@+id/go_figma_one"
+        android:text="@string/figma_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:textColor="@color/white"
+        android:layout_marginBottom="5dp"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/go_figma_two"
+        android:text="@string/figma_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        android:textColor="@color/white"
+        android:layout_marginBottom="5dp"
+        android:textSize="20sp"/>
+
+
+
 </LinearLayout>

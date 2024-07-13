@@ -201,7 +201,8 @@ class TodoMainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val layoutManager = LinearLayoutManager(baseContext)
+        val layoutManager = LinearLayoutManager(baseContext) //리사이클러뷰 리니어레이아웃매니저
+
         binding.recyclerviewTodo.layoutManager = layoutManager
         mAdapter =
             TodoAdapter(dbInstance.getTodoAll(), requestLauncher, this)
