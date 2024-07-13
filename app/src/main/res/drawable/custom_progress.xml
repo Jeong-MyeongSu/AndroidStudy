@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape>
+            <corners android:radius="2dp"/>
+            <solid android:color="#D1C4E9"/> <!-- 배경 색상 -->
+        </shape>
+    </item>
+    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            <shape>
+                <corners android:radius="2dp"/>
+                <solid android:color="#9575CD"/> <!-- 세컨더리 프로그래스 색상 -->
+            </shape>
+        </clip>
+    </item>
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <corners android:radius="2dp"/>
+                <solid android:color="#673AB7"/> <!-- 프로그래스 색상 -->
+            </shape>
+        </clip>
+    </item>
+</layer-list>

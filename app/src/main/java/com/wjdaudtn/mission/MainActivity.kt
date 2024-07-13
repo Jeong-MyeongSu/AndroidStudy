@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.wjdaudtn.mission.recyclerView.ViewHolderTwo
 import com.wjdaudtn.mission.todo.TodoMainActivity
 import com.wjdaudtn.mission.databinding.ActivityMainBinding
+import com.wjdaudtn.mission.figma.FigmaOneActivity
+import com.wjdaudtn.mission.figma.FigmaTwoActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -17,6 +19,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.tvRecyclerSample1.setOnClickListener(customOnclickListener)
         binding.goTodo.setOnClickListener(customOnclickListener)
+        binding.goFigmaOne.setOnClickListener(customOnclickListener)
+        binding.goFigmaTwo.setOnClickListener(customOnclickListener)
     }
     private val customOnclickListener: View.OnClickListener = (object:View.OnClickListener{
         override fun onClick(v: View?) {
@@ -28,8 +32,16 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this@MainActivity.baseContext, ViewHolderTwo::class.java)
                     startActivity(intent)
                 }
-                R.id.go_todo ->{
+                R.id.go_todo -> {
                     val intent = Intent(this@MainActivity.baseContext, TodoMainActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.go_figma_one -> {
+                    val intent = Intent(this@MainActivity.baseContext, FigmaOneActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.go_figma_two -> {
+                    val intent = Intent(this@MainActivity.baseContext, FigmaTwoActivity::class.java)
                     startActivity(intent)
                 }
             }
