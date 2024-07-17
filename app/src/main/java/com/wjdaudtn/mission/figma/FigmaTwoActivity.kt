@@ -93,7 +93,6 @@ class FigmaTwoActivity : AppCompatActivity() {
                 hideCloseButton() // X 버튼 숨기기
                 return false
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 hideCloseButton() // X 버튼 숨기기
                 return true
@@ -109,13 +108,6 @@ class FigmaTwoActivity : AppCompatActivity() {
             hideCloseButton() // X 버튼 숨기기
         }
 
-//클릭시 키보드 띄우는 법
-//        binding.figmaTwoSearchView.setOnClickListener{
-//            binding.figmaTwoSearchView.requestFocus()
-//            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            imm.showSoftInput(binding.figmaTwoSearchView, InputMethodManager.SHOW_IMPLICIT)
-//        }
-
     }
     //버튼 숨기기 함수
     fun hideCloseButton() {
@@ -123,8 +115,6 @@ class FigmaTwoActivity : AppCompatActivity() {
             // SearchView에서 Close 버튼을 찾아 숨기기
             val searchCloseButtonId = binding.figmaTwoEditText.context.resources
                 .getIdentifier("android:id/search_close_btn", null, null)//x버튼의 네임을 어떻게 알 수있지?
-
-
             val closeButton = binding.figmaTwoEditText.findViewById<ImageView>(searchCloseButtonId) //close 버튼 객채 초기화
             closeButton?.visibility = View.GONE
         } catch (e: Exception) {
@@ -132,3 +122,11 @@ class FigmaTwoActivity : AppCompatActivity() {
         }
     }
 }
+
+
+//클릭시 키보드 띄우는 법
+//        binding.figmaTwoSearchView.setOnClickListener{
+//            binding.figmaTwoSearchView.requestFocus()
+//            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.showSoftInput(binding.figmaTwoSearchView, InputMethodManager.SHOW_IMPLICIT)
+//        }

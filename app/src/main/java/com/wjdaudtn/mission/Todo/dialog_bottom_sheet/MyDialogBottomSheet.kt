@@ -33,6 +33,7 @@ class MyDialogBottomSheet : BottomSheetDialogFragment() {
         SUCCESS,
         FAIL
     }
+
     private var onDeleteListener: OnDeleteListener? = null
 
 
@@ -42,7 +43,7 @@ class MyDialogBottomSheet : BottomSheetDialogFragment() {
             fragment.todoItemId = todoItemId
             fragment.onDeleteListener = onDeleteListener
             return fragment
-        }//일단 chatgpt 한테 물어 봐서 사용 싱글톤 과 비슷한 형태
+        }//일단 chatgpt 한테 물어 봐서 사용
     }
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +76,8 @@ class MyDialogBottomSheet : BottomSheetDialogFragment() {
                 }
 
                 R.id.item_delete -> {
-                    val dbInstance = DataBaseInit().getTodoDao((activity as TodoMainActivity).baseContext)
+                    val dbInstance =
+                        DataBaseInit().getTodoDao((activity as TodoMainActivity).baseContext)
                     val todoItem = dbInstance.getTodoById(todoItemId)
                     if (todoItem == null) {
                         Log.e(tag, "$todoItemId 로 조회 했지만 Todo DB 에서 찾지 못했다.");

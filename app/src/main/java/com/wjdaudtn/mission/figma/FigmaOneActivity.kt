@@ -1,19 +1,24 @@
 package com.wjdaudtn.mission.figma
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.SeekBar
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.wjdaudtn.mission.R
 import com.wjdaudtn.mission.databinding.ActivityFigmaOneBinding
 import com.wjdaudtn.mission.databinding.BookMarkBinding
+import com.wjdaudtn.mission.figma.adapter.MusicPlayStateListener
+import com.wjdaudtn.mission.figma.adapter.FigmaOneAdapter
+import com.wjdaudtn.mission.figma.database.MusicDao
+import com.wjdaudtn.mission.todo.DataBaseInit
 
 /**
  *packageName    : com.wjdaudtn.mission.figma
@@ -28,17 +33,50 @@ import com.wjdaudtn.mission.databinding.BookMarkBinding
  */
 class FigmaOneActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFigmaOneBinding
-    private lateinit var mediaPlayer1: MediaPlayer
-    private lateinit var mediaPlayer2: MediaPlayer
-    private lateinit var mediaPlayer3: MediaPlayer
-    private var mediaPlayerPlace : Int = 0 //미디어플레이어 몇번째가 실행중인지 알기위한 맴버 변수
-    private var btnNum: Int = 0 //위와 동일 section에서 사용하기 위한 맴버 변수
-    private var handler = Handler() //seekbar hadler
+
+    private var handler = Handler() //seekbar handler
+    private lateinit var musicDao: MusicDao
+
+
+    data class MediaPlayerView(
+        var id: Int,
+        var resId: Int,
+        var title: String,
+        var artists: String,
+        var mediaPlayer: MediaPlayer
+    ) //adapter에 넣기위한 클래스객체
+
+    private lateinit var adapterList: MutableList<MediaPlayerView> //adapter 에 넣기 위한 객체 리스트
+
+    private var adapterPosition:Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFigmaOneBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        musicDao = FigmaDatabaseInit().getMusicDao(applicationContext)
+        adapterList = mutableListOf()
+        for(i in 0 until musicDao.getMusicAll().size){
+            adapterList.add(multiListInit(i+1))
+        }
+    }
+    private fun multiListInit(id: Int) : MediaPlayerView{
+        val musicEntity = musicDao.getMusicById(id)
+        return MediaPlayerView(
+            id = musicEntity!!.id,
+            resId = musicEntity.resourceId,
+            title = musicEntity.title,
+            artists = musicEntity.artist,
+            mediaPlayer = createMediaPlayerFromDatabase(musicEntity.id)
+        )
+    }
+
+    private fun createMediaPlayerFromDatabase(id: Int): MediaPlayer {
+        val musicEntity = musicDao.getMusicById(id)
+        val resourceId = musicEntity?.resourceId
+            ?: throw IllegalArgumentException("Music ID not found in database")
+        return MediaPlayer.create(applicationContext, resourceId)
     }
 
     override fun onResume() {
@@ -48,9 +86,6 @@ class FigmaOneActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer1.release() // MediaPlayer 자원 해제
-        mediaPlayer2.release()
-        mediaPlayer3.release()
         handler.removeCallbacksAndMessages(null)
     }
 
@@ -68,6 +103,7 @@ class FigmaOneActivity : AppCompatActivity() {
         return true
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initView() {
         // toolbar 설정
         setSupportActionBar(binding.toolbarFigmaOne)
@@ -81,224 +117,59 @@ class FigmaOneActivity : AppCompatActivity() {
             }
         })
 
-        // 음악 객체 초기화
-        mediaPlayer1 = MediaPlayer.create(applicationContext, R.raw.dreams)
-        mediaPlayer2 = MediaPlayer.create(applicationContext, R.raw.yesterday)
-        mediaPlayer3 = MediaPlayer.create(applicationContext, R.raw.moonlightdrive)
 
 
-
-        // 음악이 끝날 때 리스너 설정
-        mediaPlayer1.setOnCompletionListener {
-            finishMediaPlayer(mediaPlayerPlace)
-        }
-        mediaPlayer2.setOnCompletionListener {
-            finishMediaPlayer(mediaPlayerPlace)
-        }
-        mediaPlayer3.setOnCompletionListener {
-            finishMediaPlayer(mediaPlayerPlace)
-        }
-
-        //버튼 클릭 리스너
-        binding.btnPlay1.setOnClickListener(customOnClickListener)
-        binding.btnPlay2.setOnClickListener(customOnClickListener)
-        binding.btnPlay3.setOnClickListener(customOnClickListener)
-
-
-    }
-
-
-
-    private val customOnClickListener: View.OnClickListener = View.OnClickListener { v ->
-        when (v.id) {
-            R.id.btn_play1 -> {
-                btnNum = 1
-                Log.d("mediaPlayer1", "mediaPlayer1")
-                if (!mediaPlayer1.isPlaying) {
-                    startMediaPlayer(btnNum)
-                    bottomNavigationButton(mediaPlayerPlace)
-                    binding.bottomNavigationTitleText.text = getString(R.string.dreams)
-                } else {
-                    stopMediaPlayer(btnNum)
+        binding.figmaOneRecyclerview.adapter =
+            FigmaOneAdapter(adapterList, this, object : MusicPlayStateListener {
+                override fun musicPlay(item: MediaPlayerView, position:Int) {
+                    Log.d("", item.toString())
+                    binding.bottomNavigationTitleText.text = item.title
+                    binding.bottomNavigationArtisText.text = item.artists
+                    binding.btnBottomNavigationStartAndPause.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
+                    adapterPosition = position
                 }
-            }
 
-            R.id.btn_play2 -> {
-                btnNum = 2
-                Log.d("mediaPlayer2", "mediaPlayer2")
-                if (!mediaPlayer2.isPlaying) {
-                    startMediaPlayer(btnNum)
-                    bottomNavigationButton(mediaPlayerPlace)
-                    binding.bottomNavigationTitleText.text = getString(R.string.yesterday)
-
-                } else {
-                    stopMediaPlayer(btnNum)
+                override fun btnChange(item: MediaPlayerView) {
+                    val isMusicOn: Boolean = item.mediaPlayer.isPlaying //-1 정지, 0 일시 정지 1 켜짐
+                    val resourceIcon = if (isMusicOn) R.drawable.pause else R.drawable.right_button_2
+                    binding.btnBottomNavigationStartAndPause.background =
+                        ContextCompat.getDrawable(baseContext, resourceIcon)
                 }
-            }
 
-            R.id.btn_play3 -> {
-                btnNum = 3
-                Log.d("mediaPlayer3", "mediaPlayer3")
-                if (!mediaPlayer3.isPlaying) {
-                    startMediaPlayer(btnNum)
-                    bottomNavigationButton(mediaPlayerPlace)
-                    binding.bottomNavigationTitleText.text = getString(R.string.moonlightdrive)
-                } else {
-                    stopMediaPlayer(btnNum)
+                override fun linkSeekBar(item: MediaPlayerView) {
+                    seekBarConnection(item)
                 }
-            }
-        }
-    }
+            })
+        binding.figmaOneRecyclerview.layoutManager = LinearLayoutManager(baseContext)
 
-    // 음악이 끝났을 때 실행되는 함수
-    private fun finishMediaPlayer(mediaPlayer: Int) {
-        when (mediaPlayer) {
-            1 -> {
-                mediaPlayerPlace = 0
-                binding.btnPlay1.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-            }
-            2 -> {
-                mediaPlayerPlace = 0
-                binding.btnPlay2.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-            }
-            3 -> {
-                mediaPlayerPlace = 0
-                binding.btnPlay3.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-            }
-        }
-    }
-    // 다른 음악을 틀었을 때 현재 음악 꺼짐 일시 정지 아닌 완전 정지 시 음악 꺼짐
-    private fun compulsoryStopMediaPlayer(mediaPlayer: Int){
-        when(mediaPlayer){
-            1 -> {
-                mediaPlayer1.pause()
-                mediaPlayer1.seekTo(0) // 재설정
-                binding.btnPlay1.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-            }
-            2 -> {
-                mediaPlayer2.pause()
-                mediaPlayer2.seekTo(0) // 재설정
-                binding.btnPlay2.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-            }
-            3 -> {
-                mediaPlayer3.pause()
-                mediaPlayer3.seekTo(0) // 재설정
-                binding.btnPlay3.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-            }
-        }
-    }
-    //BottomNavigationButton
-    private fun bottomNavigationButton(mediaPlayer : Int){
+        /* Adapter */
+        val figmaOneAdapter: FigmaOneAdapter = binding.figmaOneRecyclerview.adapter as FigmaOneAdapter
+
+
         binding.btnBottomNavigationStop.setOnClickListener{
-            compulsoryStopMediaPlayer(mediaPlayer)
-            binding.btnBottomNavigationStartAndPause.background = ContextCompat.getDrawable(baseContext, R.drawable.start_pause)
+            figmaOneAdapter.onStopPlease(adapterPosition)
+            handler.removeCallbacksAndMessages(null)// handler 실행 중단
+            binding.customSeekBar.progress = 0
+            figmaOneAdapter.notifyDataSetChanged()
         }
         binding.btnBottomNavigationStartAndPause.setOnClickListener{
-            when(mediaPlayer){
-                1 -> {
-                    Log.d("mediaPlayer1", "mediaPlayer1")
-                    if (!mediaPlayer1.isPlaying) {
-                        startMediaPlayer(mediaPlayer)
-                    } else {
-                        stopMediaPlayer(mediaPlayer)
-                    }
-                }
-
-                2 -> {
-                    Log.d("mediaPlayer2", "mediaPlayer2")
-                    if (!mediaPlayer2.isPlaying) {
-                        startMediaPlayer(mediaPlayer)
-                    } else {
-                        stopMediaPlayer(mediaPlayer)
-                    }
-                }
-
-                3 -> {
-                    Log.d("mediaPlayer3", "mediaPlayer3")
-                    if (!mediaPlayer3.isPlaying) {
-                        startMediaPlayer(mediaPlayer)
-                    } else {
-                        stopMediaPlayer(mediaPlayer)
-                    }
-                }
+            figmaOneAdapter.onStartPausePlease(adapterPosition)
+            if (adapterPosition != -1) {
+                val item = adapterList[adapterPosition]
+                seekBarConnection(item)
             }
+            figmaOneAdapter.notifyDataSetChanged()
         }
-    }
-    //btn 누르면 시작 하는 미디어 플레이어 시작 함수 .음악 시작
-    private fun startMediaPlayer(mediaPlayer: Int){
-        when(mediaPlayer){
-            1 ->{
-                Log.d("mediaPlayer1_isPlaying", "mediaPlayer1_isPlaying")
-                seekBarConnection(mediaPlayer)
-                if(mediaPlayerPlace == 0 || mediaPlayerPlace == 1){
-                    mediaPlayerPlace = 1
-                }else{
-                    compulsoryStopMediaPlayer(mediaPlayerPlace)
-                    mediaPlayerPlace = 1
-                }
-                binding.btnPlay1.background = ContextCompat.getDrawable(this, R.drawable.pause)
-                mediaPlayer1.start() // 음악 재생 시작
-                binding.btnBottomNavigationStartAndPause.background = ContextCompat.getDrawable(baseContext, R.drawable.pause)
-            }
-            2->{
-                Log.d("mediaPlayer2_isPlaying", "mediaPlayer2_isPlaying")
-                seekBarConnection(mediaPlayer)
-                if(mediaPlayerPlace == 0 || mediaPlayerPlace == 2){
-                    mediaPlayerPlace = 2
-                }else{
-                    compulsoryStopMediaPlayer(mediaPlayerPlace)
-                    mediaPlayerPlace = 2
-                }
-                binding.btnPlay2.background = ContextCompat.getDrawable(baseContext, R.drawable.pause)
-                mediaPlayer2.start() // 음악 재생 시작
-                binding.btnBottomNavigationStartAndPause.background = ContextCompat.getDrawable(baseContext, R.drawable.pause)
-            }
-            3->{
-                Log.d("mediaPlayer3_isPlaying", "mediaPlayer3_isPlaying")
-                seekBarConnection(mediaPlayer)
-                if(mediaPlayerPlace == 0 || mediaPlayerPlace == 3){
-                    mediaPlayerPlace = 3
-                }else{
-                    compulsoryStopMediaPlayer(mediaPlayerPlace)
-                    mediaPlayerPlace = 3
-                }
-                binding.btnPlay3.background = ContextCompat.getDrawable(baseContext, R.drawable.pause)
-                mediaPlayer3.start() // 음악 재생 시작
-                binding.btnBottomNavigationStartAndPause.background = ContextCompat.getDrawable(baseContext, R.drawable.pause)
-            }
 
-        }
-    }
-    //btn 누르면 시작 하는 미디어 플레이어 시작 함수2 .일시 정지
-    private fun stopMediaPlayer(mediaPlayer: Int){
-        when(mediaPlayer){
-            1->{
-                binding.btnPlay1.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-                mediaPlayer1.pause() // 음악 일시 정지
-                binding.btnBottomNavigationStartAndPause.background = ContextCompat.getDrawable(baseContext, R.drawable.start_pause)
-            }
-            2->{
-                binding.btnPlay2.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-                mediaPlayer2.pause() // 음악 일시 정지
-                binding.btnBottomNavigationStartAndPause.background = ContextCompat.getDrawable(baseContext, R.drawable.start_pause)
-            }
-            3->{
-                binding.btnPlay3.background = ContextCompat.getDrawable(baseContext, R.drawable.right_button_2)
-                mediaPlayer3.pause() // 음악 일시 정지
-                binding.btnBottomNavigationStartAndPause.background = ContextCompat.getDrawable(baseContext, R.drawable.start_pause)
-            }
-        }
     }
 
-    private fun seekBarConnection(mediaPlayer: Int){
-        when(mediaPlayer){
-            1->{
-                binding.customSeekBar.max = mediaPlayer1.duration
-                updateSeekBar(mediaPlayer)
-                binding.customSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+    private fun seekBarConnection(item: MediaPlayerView){
+        binding.customSeekBar.max = item.mediaPlayer.duration
+        updateSeekBar(item)
+        binding.customSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
                     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                         if (fromUser) {
-                            mediaPlayer1.seekTo(progress)
+                            item.mediaPlayer.seekTo(progress)
                         }
                     }
 
@@ -310,80 +181,15 @@ class FigmaOneActivity : AppCompatActivity() {
 
                     }
                 })
-            }
-            2->{
-                binding.customSeekBar.max = mediaPlayer1.duration
-                updateSeekBar(mediaPlayer)
-                binding.customSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-                    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                        if (fromUser) {
-                            mediaPlayer2.seekTo(progress)
-                        }
-                    }
-
-                    override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-                    }
-                })
-            }
-            3->{
-                binding.customSeekBar.max = mediaPlayer1.duration
-                updateSeekBar(mediaPlayer)
-                binding.customSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-                    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                        if (fromUser) {
-                            mediaPlayer3.seekTo(progress)
-                        }
-                    }
-
-                    override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-                    }
-
-                    override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-                    }
-                })
-            }
-        }
     }
-
-    private fun updateSeekBar(mediaPlayer: Int) {
-        when(mediaPlayer){
-            1 -> {
-                handler.postDelayed(object : Runnable {
+    private fun updateSeekBar(item: MediaPlayerView){
+        handler.postDelayed(object : Runnable {
                     override fun run() {
-                        if (mediaPlayer1.isPlaying) {
-                            binding.customSeekBar.progress = mediaPlayer1.currentPosition
+                        if (item.mediaPlayer.isPlaying) {
+                            binding.customSeekBar.progress = item.mediaPlayer.currentPosition
                             handler.postDelayed(this, 1000)
                         }
                     }
                 }, 1000)
-            }
-            2 -> {
-                handler.postDelayed(object : Runnable {
-                    override fun run() {
-                        if (mediaPlayer2.isPlaying) {
-                            binding.customSeekBar.progress = mediaPlayer2.currentPosition
-                            handler.postDelayed(this, 1000)
-                        }
-                    }
-                }, 1000)
-            }
-            3 ->{
-                handler.postDelayed(object : Runnable {
-                    override fun run() {
-                        if (mediaPlayer3.isPlaying) {
-                            binding.customSeekBar.progress = mediaPlayer3.currentPosition
-                            handler.postDelayed(this, 1000)
-                        }
-                    }
-                }, 1000)
-            }
-        }
     }
 }
