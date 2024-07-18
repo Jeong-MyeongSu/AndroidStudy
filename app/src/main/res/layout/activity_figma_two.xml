@@ -1,109 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:orientation="vertical"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context=".figma.FigmaTwoActivity">
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/toolbar_figma_two"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="#FEF7FF"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+  <LinearLayout
+    android:id="@+id/layout_btn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/toolbar_figma_two">
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/btn_part_one"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="50dp"
+      android:layout_weight="1"
+      android:text="@string/part_one" />
+    <View
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1" />
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/btn_part_two"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="50dp"
+      android:layout_weight="1"
+      android:text="@string/part_two" />
+  </LinearLayout>
+
+  <androidx.fragment.app.FragmentContainerView
+    android:id="@+id/fragment_container_figma_two"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".figma.FigmaTwoActivity">
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_figma_two"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="#FEF7FF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/figma_two_recyclerview"
+    android:layout_marginTop="128dp"
+    android:layout_marginBottom="92dp" />
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/figma_two_recyclerview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="64dp"
+    android:layout_marginBottom="92dp" />
+
+  <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/figma_two_bottom_navigation"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/add_circle"
+        android:contentDescription="@string/add_circle_image" />
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/smail" />
+
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="64dp"
-        android:layout_marginBottom="92dp"/>
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@drawable/figma_two_bottom_navigation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_marginStart="16dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/add_circle"
-                android:contentDescription="@string/add_circle_image"/>
-            <ImageView
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/smail"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/custom_search_bar"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_marginStart="16dp"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/baseline_text_fields_24"/>
-                <SearchView
-                    android:iconifiedByDefault="false"
-                    android:searchIcon="@null"
-                    android:queryBackground="@null"
-                    android:id="@+id/figma_two_edit_text"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_gravity="center"
-                    android:layout_width="190dp"
-                    android:layout_height="wrap_content"/>
-                <Button
-                    android:layout_gravity="center"
-                    android:id="@+id/submit_button"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/baseline_send_24"/>
-<!--                <ImageView-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:background="@drawable/baseline_mic_24"/>-->
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_search_bar"
+        android:orientation="horizontal">
 
-            </LinearLayout>
-<!--            <com.google.android.material.search.SearchBar-->
-<!--                android:id="@+id/figma_two_search_bar"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:navigationIcon="@drawable/baseline_text_fields_24"-->
-<!--                app:menu="@menu/figma_two_bottom_nav_search_bar_menu">-->
-<!--                <com.google.android.material.search.SearchView-->
-<!--                    android:id="@+id/figma_two_search_view"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:focusable="true"-->
-<!--                    android:focusableInTouchMode="true"-->
-<!--                    app:layout_anchor="@id/figma_two_search_bar">-->
-<!--                    <EditText-->
-<!--                        android:id="@+id/figma_two_edit_text"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"/>-->
-<!--                    &lt;!&ndash; Search suggestions/results go here (ScrollView, RecyclerView, etc.). &ndash;&gt;-->
-<!--                </com.google.android.material.search.SearchView>-->
-<!--            </com.google.android.material.search.SearchBar>-->
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginStart="16dp"
+          android:background="@drawable/baseline_text_fields_24" />
 
+        <SearchView
+          android:id="@+id/figma_two_edit_text"
+          android:layout_width="190dp"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:iconifiedByDefault="false"
+          android:queryBackground="@null"
+          android:searchIcon="@null" />
 
-        </LinearLayout>
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        <Button
+          android:id="@+id/submit_button"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:background="@drawable/baseline_send_24" />
+      </LinearLayout>
+    </LinearLayout>
+  </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.constraintlayout.widget.ConstraintLayout>

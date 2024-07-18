@@ -1,6 +1,7 @@
 package com.wjdaudtn.mission.figma
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -8,10 +9,12 @@ import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.wjdaudtn.mission.R
 import com.wjdaudtn.mission.databinding.ActivityFigmaTwoBinding
 import com.wjdaudtn.mission.databinding.CilpBinding
-import com.wjdaudtn.mission.figma.adapter.FigmaTwoAdapter
+import com.wjdaudtn.mission.figma.database.TalkDao
+import com.wjdaudtn.mission.figma.fragment.FigmaTwoFragmentPartOne
+import com.wjdaudtn.mission.figma.fragment.FigmaTwoFragmentPartTwo
 
 /**
  *packageName    : com.wjdaudtn.mission.figma
@@ -26,12 +29,16 @@ import com.wjdaudtn.mission.figma.adapter.FigmaTwoAdapter
  */
 class FigmaTwoActivity : AppCompatActivity() {
     data class StringAndType(val string: String, val type: Int)  //리사이클러 뷰에 들어갈 리스트에 들어갈 데이터클래스 생성
-    lateinit var figmaTwoContextList: MutableList<StringAndType> //리사이클러 뷰에 들어갈 리스트
+//    lateinit var figmaTwoContextList: MutableList<StringAndType> //리사이클러 뷰에 들어갈 리스트
+    private lateinit var talkDao: TalkDao
     private lateinit var binding: ActivityFigmaTwoBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFigmaTwoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        talkDao = FigmaTalkDatabaseInit().getTalkDao(applicationContext)
     }
 
     override fun onResume() {
@@ -67,27 +74,16 @@ class FigmaTwoActivity : AppCompatActivity() {
                 finish()
             }
         })
-        //정적인 데이터
-        figmaTwoContextList = mutableListOf(
-            StringAndType("So excited!",1),
-            StringAndType("Yesterday",3),
-            StringAndType("What should we make?", 1),
-            StringAndType("Pasta?",1),
-            StringAndType("Homemade Dumplings",4),
-            StringAndType("or we could make this?", 2),
-            StringAndType("Sounds good!",1)
-        )
 
-        //recyclerView
-        binding.figmaTwoRecyclerview.adapter = FigmaTwoAdapter(figmaTwoContextList)
-        binding.figmaTwoRecyclerview.layoutManager = LinearLayoutManager(baseContext)
-
+        binding.btnPartOne.setOnClickListener(customClickListener)
+        binding.btnPartTwo.setOnClickListener(customClickListener)
 
         hideCloseButton()// x버튼 숨기기
+
         binding.figmaTwoEditText.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                figmaTwoContextList.add(StringAndType(query.toString(), 2))
+                Log.d("onQueryTextSubmit","입력함")
                 binding.figmaTwoEditText.setQuery("", false)//텍스트 지우기
                 binding.figmaTwoEditText.clearFocus() //포커스 제거
                 hideCloseButton() // X 버튼 숨기기
@@ -99,16 +95,67 @@ class FigmaTwoActivity : AppCompatActivity() {
             }
         })
 
-        binding.submitButton.setOnClickListener {
-            val query = binding.figmaTwoEditText.query.toString()
-            figmaTwoContextList.add(StringAndType(query, 2))
-            binding.figmaTwoEditText.setQuery("", false) // 텍스트를 지웁니다
-            binding.figmaTwoEditText.clearFocus() // 포커스를 제거합니다
-            binding.figmaTwoRecyclerview.scrollToPosition(figmaTwoContextList.size - 1) // RecyclerView가 데이터 설정 후 스크롤을 가장 아래로 이동
-            hideCloseButton() // X 버튼 숨기기
-        }
+
+
+//
+//        //recyclerView
+//        binding.figmaTwoRecyclerview.adapter = FigmaTwoAdapter(figmaTwoContextList)
+//        binding.figmaTwoRecyclerview.layoutManager = LinearLayoutManager(baseContext)
+//
+//
+
+//        binding.figmaTwoEditText.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+//            android.widget.SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                figmaTwoContextList.add(StringAndType(query.toString(), 2))
+//                binding.figmaTwoEditText.setQuery("", false)//텍스트 지우기
+//                binding.figmaTwoEditText.clearFocus() //포커스 제거
+//                hideCloseButton() // X 버튼 숨기기
+//                return false
+//            }
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                hideCloseButton() // X 버튼 숨기기
+//                return true
+//            }
+//        })
+//
+//        binding.submitButton.setOnClickListener {
+//            val query = binding.figmaTwoEditText.query.toString()
+//            figmaTwoContextList.add(StringAndType(query, 2))
+//            binding.figmaTwoEditText.setQuery("", false) // 텍스트를 지웁니다
+//            binding.figmaTwoEditText.clearFocus() // 포커스를 제거합니다
+//            binding.figmaTwoRecyclerview.scrollToPosition(figmaTwoContextList.size - 1) // RecyclerView가 데이터 설정 후 스크롤을 가장 아래로 이동
+//            hideCloseButton() // X 버튼 숨기기
+//        }
 
     }
+
+    private val customClickListener:View.OnClickListener = (View.OnClickListener { v ->
+        when(v.id){
+            R.id.btn_part_one -> {
+                Log.d("btn_part_one","파트1 버튼 클릭")
+                showPartOneFragment()
+            }
+
+            R.id.btn_part_two -> {
+                Log.d("btn_part_two", "파트2 버튼 클릭")
+                showPartTwoFragment()
+            }
+        }
+    })
+    private fun showPartOneFragment(){
+        val partOneFragment = FigmaTwoFragmentPartOne()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_figma_two, partOneFragment)
+            .commit()
+    }
+    private fun showPartTwoFragment(){
+        val partTwoFragment = FigmaTwoFragmentPartTwo()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_figma_two, partTwoFragment)
+            .commit()
+    }
+
     //버튼 숨기기 함수
     fun hideCloseButton() {
         try {
