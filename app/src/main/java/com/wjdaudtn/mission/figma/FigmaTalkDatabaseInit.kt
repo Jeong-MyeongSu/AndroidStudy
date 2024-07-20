@@ -40,8 +40,8 @@ class FigmaTalkDatabaseInit {
         talkDao = talkDatabase.talkDao()
         if(talkDao.getTalkAll().isEmpty()){
             val initialTalk = listOf(
-                TalkEntity(content = "hi hi hi hi hi hi hi",userNum = 1),
-                TalkEntity(content = "bye bye bye bye.", userNum = 2)
+                TalkEntity(content = "hi hi hi hi hi hi hi",userNum = 2),
+                TalkEntity(content = "bye bye bye bye.", userNum = 1)
             )
             for (talk in initialTalk) {
                 if (talkDao.getTalkId(talk.id) == null) {

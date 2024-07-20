@@ -1,13 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:orientation="horizontal"
   tools:context=".figma.fragment.FigmaTwoFragmentPartOne">
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/figma_two_recyclerview_part_one"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
-</LinearLayout>
+    android:layout_height="match_parent"
+    android:layout_marginBottom="92dp" />
+
+  <com.google.android.material.bottomnavigation.BottomNavigationView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/figma_two_bottom_navigation"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/add_circle"
+        android:contentDescription="@string/add_circle_image" />
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/smail" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_search_bar"
+        android:orientation="horizontal">
+
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginStart="16dp"
+          android:background="@drawable/baseline_text_fields_24" />
+
+        <SearchView
+          android:id="@+id/figma_two_edit_text"
+          android:layout_width="190dp"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginStart="16dp"
+          android:layout_marginEnd="16dp"
+          android:iconifiedByDefault="false"
+          android:queryBackground="@null"
+          android:searchIcon="@null" />
+
+        <Button
+          android:id="@+id/submit_button"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center"
+          android:background="@drawable/baseline_send_24" />
+      </LinearLayout>
+    </LinearLayout>
+  </com.google.android.material.bottomnavigation.BottomNavigationView>
+</androidx.constraintlayout.widget.ConstraintLayout>
