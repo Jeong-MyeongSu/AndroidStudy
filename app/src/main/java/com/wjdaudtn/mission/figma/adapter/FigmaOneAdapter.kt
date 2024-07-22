@@ -11,7 +11,6 @@ import com.wjdaudtn.mission.R
 import com.wjdaudtn.mission.databinding.FigmaOneSectionItemBinding
 import com.wjdaudtn.mission.figma.FigmaDatabaseInit
 import com.wjdaudtn.mission.figma.FigmaOneActivity
-import com.wjdaudtn.mission.figma.FigmaOneActivity.MediaPlayerView
 import com.wjdaudtn.mission.figma.database.MusicDao
 
 /**
@@ -27,19 +26,18 @@ import com.wjdaudtn.mission.figma.database.MusicDao
  */
 
 
-interface MusicPlayStateListener {
-    fun musicPlay(item: MediaPlayerView, position: Int)
-    fun btnChange(item: MediaPlayerView)
-    fun linkSeekBar(item: MediaPlayerView)
-}
+//interface MusicPlayStateListener {
+//    fun musicPlay(item: MediaPlayerView, position: Int)
+//    fun btnChange(item: MediaPlayerView)
+//    fun linkSeekBar(item: MediaPlayerView)
+//}
 
 class FigmaOneAdapter(
-    private val musicList: MutableList<MediaPlayerView>,
-    private val activity: FigmaOneActivity,
-    private val musicPlayListener: MusicPlayStateListener
+    private val musicList: MutableList<FigmaOneActivity.MediaPlayerView2>,
+    private val activity: FigmaOneActivity
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var dbinstance: MusicDao = FigmaDatabaseInit().getMusicDao(activity.baseContext)
+//    private var dbinstance: MusicDao = FigmaDatabaseInit().getMusicDao(activity.baseContext)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return FigmaOneHolder(
@@ -62,43 +60,42 @@ class FigmaOneAdapter(
     /* 정지 요청 왔음 */
     fun onStopPlease(position:Int) {
         stopPlayer(musicList[position])
-        musicPlayListener.linkSeekBar(musicList[position])
+        musicList[position].linkSeekBar(musicList[position])
     }
     fun onStartPausePlease(position: Int){
         if(musicList[position].mediaPlayer.isPlaying){
             pausePlayer(musicList[position])
         }else{
             musicList[position].mediaPlayer.start()
-            musicPlayListener.btnChange(musicList[position])
+            musicList[position].btnChange(musicList[position])
         }
     }
 
-
-
-
     //데이터 베이스 id, resourceId로 미디어 플레이어 리턴
-    private fun createMediaPlayerFromDatabase(id: Int): MediaPlayer {
-        val musicEntity = dbinstance.getMusicById(id)
-        val resourceId = musicEntity?.resourceId
-            ?: throw IllegalArgumentException("Music ID not found in database")
-        return MediaPlayer.create(activity.baseContext, resourceId)
-    }
+//    private fun createMediaPlayerFromDatabase(id: Int): MediaPlayer {
+//        val musicEntity = dbinstance.getMusicById(id)
+//        val resourceId = musicEntity?.resourceId
+//            ?: throw IllegalArgumentException("Music ID not found in database")
+//        return MediaPlayer.create(activity.baseContext, resourceId)
+//    }
 
     //일시 정지
-    private fun pausePlayer(item: MediaPlayerView) {
+    private fun pausePlayer(item: FigmaOneActivity.MediaPlayerView2) {
         item.mediaPlayer.pause()
-        musicPlayListener.btnChange(item)
+        item.btnChange(item)
     }
 
     //음악이 시작 될 때
-    private fun startPlayer(item: MediaPlayerView) {
+    private fun startPlayer(item: FigmaOneActivity.MediaPlayerView2) {
         item.mediaPlayer.start()
     }
-
-    private fun stopPlayer(item: MediaPlayerView) {
-        item.mediaPlayer.release()
-        item.mediaPlayer = createMediaPlayerFromDatabase(item.id)
-        musicPlayListener.btnChange(item)
+    //정지
+    private fun stopPlayer(item: FigmaOneActivity.MediaPlayerView2) {
+//        item.mediaPlayer.release()
+//        item.mediaPlayer = createMediaPlayerFromDatabase(item.id)
+        item.mediaPlayer.pause()
+        item.mediaPlayer.seekTo(0) // 재설정
+        item.btnChange(item)
     }
 
     inner class FigmaOneHolder(val binding: FigmaOneSectionItemBinding) :
@@ -134,10 +131,9 @@ class FigmaOneAdapter(
                     if (!item.mediaPlayer.isPlaying) {
                         Log.d("!mediaPlayer.isPlaying", "현재 플레이스에 뮤직이 안틀어져있어 틀어야해")
                         startPlayer(item)
-                        musicPlayListener.musicPlay(item,adapterPosition)
-                        musicPlayListener.btnChange(item)
-                        musicPlayListener.linkSeekBar(item)
-
+                        item.musicPlay(item,adapterPosition)
+                        item.btnChange(item)
+                        item.linkSeekBar(item)
                     } else {
                         Log.d("mediaPlayer.isPlaying", "현재 플레이스에 뮤직이 틀어져있어 꺼야해")
                         pausePlayer(item)
@@ -148,7 +144,8 @@ class FigmaOneAdapter(
                     Log.d("노래 끝남", "노래 끝남")
                     item.mediaPlayer.pause()
                     item.mediaPlayer.seekTo(0) // 재설정
-                    musicPlayListener.btnChange(item)
+                    item.btnChange(item)
+                    item.linkSeekBar(item)
                     notifyDataSetChanged()
                 }
             }
