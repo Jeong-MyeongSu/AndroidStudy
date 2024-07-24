@@ -5,47 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingTop="16dp"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/tv_recycler_sample_1"
-        android:text="@string/recyclerview"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcyStudy"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_dark"
-        android:textColor="@color/white"
-        android:layout_marginBottom="5dp"
-        android:textSize="20sp"/>
-    <TextView
-        android:id="@+id/go_todo"
-        android:text="@string/todo_project"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_dark"
-        android:textColor="@color/white"
-        android:layout_marginBottom="5dp"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:id="@+id/go_figma_one"
-        android:text="@string/figma_one"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_dark"
-        android:textColor="@color/white"
-        android:layout_marginBottom="5dp"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:id="@+id/go_figma_two"
-        android:text="@string/figma_two"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_dark"
-        android:textColor="@color/white"
-        android:layout_marginBottom="5dp"
-        android:textSize="20sp"/>
-
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>
