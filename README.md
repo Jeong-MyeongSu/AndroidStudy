@@ -12,7 +12,7 @@
 ## 디자인 (가끔사용, 유용)
 [UNSCREEN: 배경 투명 처리(이미지, 동영상)](https://www.unscreen.com/)   
 [이미지 파일 색상 추출](http://www.cssdrive.com/imagepalette/index.php)   
-[앱 아이콘 생성: 앱 마켓 아이콘용](https://appiconmaker.co/)
+[앱 아이콘 생성: 앱 마켓 아이콘용](https://appiconmaker.co/)   
 [무료 배경이미지](https://www.shutterstock.com/ko/?c3apidt=p52913990603&gclid=CjwKCAjw4_H6BRALEiwAvgfzqy_YoX_wjDMewTbyQ9SOn7dKmpGiBxHbh2tfSl5fekycO07yroNNDBoCssMQAvD_BwE&gclsrc=aw.ds&kw=unsplash)   
 [무료 아이콘](https://www.flaticon.com/kr/uicons/interface-icons)   
 
