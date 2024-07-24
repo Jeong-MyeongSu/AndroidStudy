@@ -129,6 +129,18 @@ class TodoMainActivity : AppCompatActivity() {
         if (todo != null) {
             todo.alarmSwitch = 0 // 알람이 울려 알람 스위치 꺼짐
             dbInstance.setUpdateTodo(todo)
+            //warkManager
+//            val inputData = Data.Builder().putInt(TODO_ID, todoId).build()
+//            val updateTodoWorkRequest = OneTimeWorkRequest.Builder(UpdateTodoWorker::class.java)
+//                .setInputData(inputData)
+//                .build()
+//
+//            WorkManager.getInstance(this).enqueue(updateTodoWorkRequest)
+            //코루틴
+//            CoroutineScope(Dispatchers.IO).launch {
+//                todo.alarmSwitch = 0 // 알람이 울려 알람 스위치 꺼짐
+//                dbInstance.setUpdateTodo(todo)
+//            }
             mAdapter.updateItem(todo)
         }
     }

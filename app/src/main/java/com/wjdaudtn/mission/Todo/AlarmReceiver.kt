@@ -20,12 +20,14 @@ class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
 //        Log.d("AlarmReceiver", "Alarm received!(notification)")
-        val showActivityIntent = Intent(context, TodoMainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, showActivityIntent, PendingIntent.FLAG_IMMUTABLE)
+        val showActivityIntent = Intent(context, TodoMainActivity::class.java) // notification 누르면 메인 엑티비티로 가기위한 intent
+        val pendingIntent = PendingIntent.getActivity(context, 0, showActivityIntent, PendingIntent.FLAG_IMMUTABLE)  // 메인 액티비티로 가기위한 pendingintent .setContentIntent()의 매개변수로 사용
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "todo_channel"
         val channelName = "Todo Notifications"
+
+        val id = intent.getIntExtra(RESULT_KEY_ID, DEFAULT_VALUE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
@@ -41,7 +43,8 @@ class AlarmReceiver : BroadcastReceiver() {
             .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(0, notification)
+        notificationManager.notify(id, notification)
+        //putExtra로 id도 받아서 쓰면 여러게 뜰라나?
 
 //        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 //        val notificationBuilder: NotificationCompat.Builder

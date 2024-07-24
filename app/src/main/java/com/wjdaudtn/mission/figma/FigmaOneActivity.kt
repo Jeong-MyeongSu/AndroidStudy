@@ -3,7 +3,6 @@ package com.wjdaudtn.mission.figma
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -17,6 +16,12 @@ import com.wjdaudtn.mission.databinding.ActivityFigmaOneBinding
 import com.wjdaudtn.mission.databinding.BookMarkBinding
 import com.wjdaudtn.mission.figma.adapter.FigmaOneAdapter
 import com.wjdaudtn.mission.figma.database.MusicDao
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 
 /**
@@ -33,8 +38,9 @@ import com.wjdaudtn.mission.figma.database.MusicDao
 class FigmaOneActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFigmaOneBinding
 
-    private var handler = Handler() //seekbar handler
-    private lateinit var musicDao: MusicDao
+//    private var handler = Handler() //seekbar handler api30 deprecated
+    private lateinit var musicDao: MusicDao //데이터베이스 인터페이스
+    private lateinit var job: Job //코루틴
 
     //추상 클래스
     abstract class MediaPlayerView2(
@@ -114,7 +120,8 @@ class FigmaOneActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacksAndMessages(null)
+        job.cancel()
+//        handler.removeCallbacksAndMessages(null)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -156,7 +163,8 @@ class FigmaOneActivity : AppCompatActivity() {
 
         binding.btnBottomNavigationStop.setOnClickListener {
             figmaOneAdapter.onStopPlease(adapterPosition)
-            handler.removeCallbacksAndMessages(null)// handler 실행 중단
+            job.cancel()
+//            handler.removeCallbacksAndMessages(null)// handler 실행 중단
             binding.customSeekBar.progress = 0
             figmaOneAdapter.notifyDataSetChanged()
         }
@@ -192,16 +200,26 @@ class FigmaOneActivity : AppCompatActivity() {
     }
 
     private fun updateSeekBar(item: MediaPlayerView2) {
-        handler.postDelayed(object : Runnable {
-            override fun run() {
+        job = CoroutineScope(Dispatchers.Main).launch {
+            while (isActive) {
                 if (item.mediaPlayer.isPlaying) {
                     binding.customSeekBar.progress = item.mediaPlayer.currentPosition
-                    handler.postDelayed(this, 1000)
                 } else {
                     binding.customSeekBar.progress = item.mediaPlayer.currentPosition
                 }
+                delay(1_000)  // 1초마다 업데이트
             }
-        }, 1000)
+        }
+//        handler.postDelayed(object : Runnable {
+//            override fun run() {
+//                if (item.mediaPlayer.isPlaying) {
+//                    binding.customSeekBar.progress = item.mediaPlayer.currentPosition
+//                    handler.postDelayed(this, 1_000)
+//                } else {
+//                    binding.customSeekBar.progress = item.mediaPlayer.currentPosition
+//                }
+//            }
+//        }, 1_000)
     }
 }
 
