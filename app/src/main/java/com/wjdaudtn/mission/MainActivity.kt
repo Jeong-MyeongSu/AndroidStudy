@@ -11,6 +11,7 @@ import com.wjdaudtn.mission.databinding.ActivityMainBinding
 import com.wjdaudtn.mission.databinding.ItemMainStudyBinding
 import com.wjdaudtn.mission.figma.FigmaOneActivity
 import com.wjdaudtn.mission.figma.FigmaTwoActivity
+import com.wjdaudtn.mission.figma.music.MusicActivity
 import com.wjdaudtn.mission.recyclerView.ViewHolderTwo
 import com.wjdaudtn.mission.todo.TodoMainActivity
 import java.text.SimpleDateFormat
@@ -56,6 +57,13 @@ class MainActivity : AppCompatActivity() {
                     "Music List & 교차 플레이, Room DB, MediaPlayer 사용",
                     "2024-07-10",
                     FigmaOneActivity::class.java
+                ),
+                Study(
+                    "JetPack, Android SDK",
+                    "Figma",
+                    "Music List & 교차 플레이, Room DB, MediaPlayer 사용 (2)",
+                    "2024-07-10",
+                    MusicActivity::class.java
                 ),
                 Study(
                     "JetPack",
