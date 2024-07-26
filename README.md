@@ -25,3 +25,9 @@
 
 리스트 가이드 참고 
 https://m3.material.io/components/lists/specs
+
+
+APK 서명
+```zsh
+sh sign_v2.sh apk-release.apk
+```

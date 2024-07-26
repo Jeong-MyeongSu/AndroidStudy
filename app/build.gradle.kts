@@ -1,3 +1,8 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+import java.text.SimpleDateFormat
+import java.util.Date
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -14,7 +19,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -35,9 +40,16 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    viewBinding{
+    viewBinding {
         enable = true
     }
+
+    fun formatDateToYYYYDDMM(date: Date): String {
+        val formatter = SimpleDateFormat("yyyy-dd-MM")
+        return formatter.format(date)
+    }
+    archivesName = "Mission-v${defaultConfig.versionName}-${formatDateToYYYYDDMM(Date())}"
+
 }
 
 dependencies {
@@ -45,11 +57,17 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.work.runtime.ktx)
+//    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
+    implementation(libs.kotlinx.coroutines.core)
 }
+
+// apk 생성할때 나는 규칙이있다.
+// apk-{release}-{YYYY-MM-DD}.apk
+// 생성할때 git에 TAG 자동으로

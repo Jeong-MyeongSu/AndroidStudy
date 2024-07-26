@@ -2,6 +2,9 @@ package com.wjdaudtn.mission
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 /**
@@ -31,6 +34,26 @@ class ExampleUnitTest {
 //        sdf.timeZone = calendar.timeZone
 //        return sdf.format(calendar.time)
 //    }
+
+    @Test
+    fun main(){
+        getDaysSinceStartDate("2024-07-10")
+    }
+    fun getDaysSinceStartDate(startDate: String, dateFormat: String = "yyyy-MM-dd"): Long {
+        val mDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
+        println("mDateFormat : $mDateFormat")
+        val startDateParsed = mDateFormat.parse(startDate)
+        println("startDateParsed :$startDateParsed")
+        val currentDate = Date()
+        println("currentDate :$currentDate")
+
+        return if (startDateParsed != null) {
+            val diff = currentDate.time - startDateParsed.time
+            diff / (1000 * 60 * 60 * 24)
+        } else {
+            -1 // Parsing error
+        }
+    }
 
 
 }

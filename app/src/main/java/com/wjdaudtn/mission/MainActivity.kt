@@ -72,6 +72,13 @@ class MainActivity : AppCompatActivity() {
                     "2024-07-10",
                     FigmaTwoActivity::class.java
                 ),
+                Study(
+                    "JetPack, Android SDK, Firebase",
+                    "QR, Barcode 촬영",
+                    "QR 이나 Barcode 를 촬영 하여 데이터 확인.",
+                    "2024-07-25",
+                    null,
+                )
             )
         )
     }
@@ -90,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         val startDate: String, // 시작 날짜
 
         // 이동할 화면 Activity
-        val activity: Class<out AppCompatActivity>
+        val activity: Class<out AppCompatActivity>?  //out 공변성  A가 B의 하위 타입 이면 C<A> 도 C<B>의 하위 타입 이다. 즉 AppCompatActivity 를 상속 받은 클래스 형을 가지는 프로퍼티를 정의
 
         // TODO: 추가 필요한 정보 있으면 추가
         // ex: 파일 경로 / 진행 상태(진행중, 완료) / 기타
@@ -127,11 +134,12 @@ class MainActivity : AppCompatActivity() {
                 binding.tvStudyStartDate.text = startDate
 
                 getDaysSinceStartDate(startDate).let {
-                    binding.tvStudyStartDate.append("  D+${it}")
+                    binding.tvStudyStartDate.append("  D+${it}") //append text 뒤에 붙이기
                 }
 
                 binding.root.setOnClickListener {
-                    val intent = Intent(binding.root.context, studyList[adapterPosition].activity)
+                    val nextActivity = studyList[adapterPosition].activity ?: return@setOnClickListener
+                    val intent = Intent(binding.root.context, nextActivity)
                     binding.root.context.startActivity(intent)
                 }
             }
@@ -145,8 +153,8 @@ class MainActivity : AppCompatActivity() {
          * @return
          */
         fun getDaysSinceStartDate(startDate: String, dateFormat: String = "yyyy-MM-dd"): Long {
-            val dateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
-            val startDateParsed = dateFormat.parse(startDate)
+            val mDateFormat = SimpleDateFormat(dateFormat, Locale.getDefault())
+            val startDateParsed = mDateFormat.parse(startDate)
             val currentDate = Date()
 
             return if (startDateParsed != null) {
