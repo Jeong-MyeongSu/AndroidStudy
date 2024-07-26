@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -33,6 +34,8 @@ import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_TITLE
 import java.util.Calendar
 
 class TodoMainActivity : AppCompatActivity() {
+    private val tag: String = TodoMainActivity::class.java.simpleName
+
     private lateinit var binding: ActivityTodoMainBinding   //activity_todo_main.xml 을 바인딩 하여 뷰 객체를 만들기 위한 객체 생성
     private lateinit var mAdapter: TodoAdapter  //TodoAdapter 객채 생성
     private var todayMillisecond = Calendar.getInstance().timeInMillis  //오늘 시간을 캘린더 클래스 로 초기화
@@ -96,6 +99,7 @@ class TodoMainActivity : AppCompatActivity() {
             // database 에 Todo 객체 update
             dbInstance.setUpdateTodo(todo)
             mAdapter.updateItem(todo)
+            Log.d(tag,"알람 세팅1")
             alarmAsk(todo, alarmSwitch, millisecond)
 
         } else {
@@ -127,22 +131,26 @@ class TodoMainActivity : AppCompatActivity() {
     private fun updateTodoItem(todoId: Int) {
         val todo = dbInstance.getTodoById(todoId)
         if (todo != null) {
-            todo.alarmSwitch = 0 // 알람이 울려 알람 스위치 꺼짐
-            dbInstance.setUpdateTodo(todo)
-            //warkManager
-//            val inputData = Data.Builder().putInt(TODO_ID, todoId).build()
-//            val updateTodoWorkRequest = OneTimeWorkRequest.Builder(UpdateTodoWorker::class.java)
-//                .setInputData(inputData)
-//                .build()
-//
-//            WorkManager.getInstance(this).enqueue(updateTodoWorkRequest)
-            //코루틴
-//            CoroutineScope(Dispatchers.IO).launch {
-//                todo.alarmSwitch = 0 // 알람이 울려 알람 스위치 꺼짐
-//                dbInstance.setUpdateTodo(todo)
-//            }
             mAdapter.updateItem(todo)
         }
+
+//        if (todo != null) {
+//            todo.alarmSwitch = 0 // 알람이 울려 알람 스위치 꺼짐
+//            dbInstance.setUpdateTodo(todo)
+//            //warkManager
+////            val inputData = Data.Builder().putInt(TODO_ID, todoId).build()
+////            val updateTodoWorkRequest = OneTimeWorkRequest.Builder(UpdateTodoWorker::class.java)
+////                .setInputData(inputData)
+////                .build()
+////
+////            WorkManager.getInstance(this).enqueue(updateTodoWorkRequest)
+//            //코루틴
+////            CoroutineScope(Dispatchers.IO).launch {
+////                todo.alarmSwitch = 0 // 알람이 울려 알람 스위치 꺼짐
+////                dbInstance.setUpdateTodo(todo)
+////            }
+//            mAdapter.updateItem(todo)
+//        }
     }
 
     private val customClickListener: View.OnClickListener = (View.OnClickListener { v ->
@@ -176,6 +184,7 @@ class TodoMainActivity : AppCompatActivity() {
             val remainingTimeString = "남은 시간: ${days}일 ${hours}시간 ${minutes}분 ${seconds}초"
             Toast.makeText(baseContext, remainingTimeString, Toast.LENGTH_SHORT)
                 .show()
+            Log.d(tag,"알랑 세팅됨1")
             setAlarm(todo)
         }
     }
@@ -197,6 +206,7 @@ class TodoMainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance().apply {
             timeInMillis = todo.millisecond
         }
+        Log.d(tag,"알람 생성1")
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 

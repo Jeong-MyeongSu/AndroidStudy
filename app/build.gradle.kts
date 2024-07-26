@@ -1,3 +1,8 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+import java.text.SimpleDateFormat
+import java.util.Date
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -35,9 +40,16 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-    viewBinding{
+    viewBinding {
         enable = true
     }
+
+    fun formatDateToYYYYDDMM(date: Date): String {
+        val formatter = SimpleDateFormat("yyyy-dd-MM")
+        return formatter.format(date)
+    }
+    archivesName = "Mission-v${defaultConfig.versionName}-${formatDateToYYYYDDMM(Date())}"
+
 }
 
 dependencies {
@@ -55,3 +67,7 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     implementation(libs.kotlinx.coroutines.core)
 }
+
+// apk 생성할때 나는 규칙이있다.
+// apk-{release}-{YYYY-MM-DD}.apk
+// 생성할때 git에 TAG 자동으로

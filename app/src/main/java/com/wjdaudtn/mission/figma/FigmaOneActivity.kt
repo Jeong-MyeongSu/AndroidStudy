@@ -71,6 +71,7 @@ class FigmaOneActivity : AppCompatActivity() {
         for (i in 0 until musicDao.getMusicAll().size) {
             adapterList2.add(multiListInit2(i + 1))
         }
+        job = Job()
 
     }
 
@@ -120,7 +121,9 @@ class FigmaOneActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        job.cancel()
+        if (::job.isInitialized) {
+            job.cancel()
+        }
 //        handler.removeCallbacksAndMessages(null)
     }
 
