@@ -1,3 +1,7 @@
+import com.android.build.api.variant.BuildConfigField
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.api.BaseVariantOutput
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -21,16 +25,45 @@ android {
         versionCode = 1
         versionName = "1.2"
 
+//        buildConfigField("String", "BUILD_TYPE", "\"${buildType}\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+//        release {
+//            isMinifyEnabled = false
+//            proguardFiles(
+//                getDefaultProguardFile("proguard-android-optimize.txt"),
+//                "proguard-rules.pro"
+//            )
+////            resValue("string","BUILD_TYPE","release")
+//        }
+
+        create("staging") {
+
+            buildConfigField("String", "BUILD_TYPE", "\"debug\"")
+            initWith(getByName("debug"))
+            manifestPlaceholders["hostName"] = "com.wjdaudtn.mission"
+            applicationIdSuffix = ".debugStaging"
+
+        }
+        create("demo") {
+
+            buildConfigField("String", "BUILD_TYPE", "\"release\"")
+            initWith(getByName("release"))
+            manifestPlaceholders["hostName"] = "com.wjdaudtn.mission"
+            applicationIdSuffix = ".releaseDemo"
+
+        }
+        create("production") {
+
+            buildConfigField("String", "BUILD_TYPE", "\"release\"")
+            initWith(getByName("release"))
+
+            manifestPlaceholders["hostName"] = "com.wjdaudtn.mission"
+            applicationIdSuffix = ".releaseProduction"
+
         }
     }
     compileOptions {
@@ -45,10 +78,108 @@ android {
     }
 
     fun formatDateToYYYYDDMM(date: Date): String {
-        val formatter = SimpleDateFormat("yyyy-dd-MM")
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
         return formatter.format(date)
     }
+
+//    afterEvaluate {
+//        val androidExtension = project.extensions.getByType(AppExtension::class.java)
+//        val variants = androidExtension.applicationVariants
+//        for (variant in variants) {
+//            val buildTypeName = variant.buildType.name
+//            for (output in variant.outputs) {
+//                output as BaseVariantOutputImpl
+//                val apkName = "Mission-$buildTypeName-v${defaultConfig.versionName}-${
+//                    formatDateToYYYYDDMM(Date())
+//                }.apk"
+//                val outputFile = output.outputFile
+//
+//                val renameTask =
+//                    tasks.register("rename${variant.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}Apk") {
+//                        doLast {
+//                            File(outputFile.parent, apkName).apply {
+//                                if (exists()) {
+//                                    delete()
+//                                }
+//                            }
+//                            outputFile.renameTo(File(outputFile.parent, apkName))
+//                        }
+//                    }
+//
+//                variant.assembleProvider.configure {
+//                    finalizedBy(renameTask)
+//                }
+//            }
+//        }
+//    }//chatgpt
+
+//    applicationVariants.all { variant ->
+//        variant.outputs.all { output ->
+//            output as BaseVariantOutputImpl
+//            val buildTypeName = variant.buildType.name
+//            val apkName = "Mission-$buildTypeName-v${defaultConfig.versionName}-${formatDateToYYYYDDMM(Date())}.apk"
+//            output.outputFileName.(apkName)
+//        }
+//    }
+
+//    applicationVariants.all { variant ->
+//        variant.outputs.forEach { output ->
+//            if (output is BaseVariantOutputImpl) {
+//                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+//                val date = dateFormat.format(Date())
+//                val appName = "AndroidStudy" // 앱 이름을 적절하게 변경하세요.
+//                val versionName = variant.versionName ?: "1.0"
+//                val buildType = variant.buildType.name
+//                val flavorName = variant.flavorName ?: "default"
+//
+//                val fileName = "${appName}-${versionName}-${buildType}-${flavorName}-${date}.apk"
+//                output.outputFileName = fileName
+//            }
+//        }
+//        return@android
+//    }
+
+//    applicationVariants.all { variant ->
+//        variant.outputs.all { output ->
+//            if (output is BaseVariantOutputImpl) {
+//                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+//                val date = dateFormat.format(Date())
+//                val appName = "AndroidStudy" // 앱 이름을 적절하게 변경하세요.
+//                val versionName = variant.versionName ?: "1.0"
+//                val buildType = variant.buildType.name
+//                val flavorName = variant.flavorName ?: "default"
+//
+//                val fileName = "${appName}-${versionName}-${buildType}-${flavorName}-${date}.apk"
+//                output.outputFileName = fileName
+//            }
+//        }
+//        return@android
+//    }
+
+//    applicationVariants.all { variant ->
+//
+//        variant.outputs.all { baseVariantOutput: BaseVariantOutput? ->
+//            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+//            val date = dateFormat.format(Date())
+//            val appName = "AndroidStudy" // 앱 이름을 적절하게 변경하세요.
+//            val versionName = variant.versionName ?: "1.0"
+//            val buildType = variant.buildType.name
+//            val flavorName = variant.flavorName ?: "default"
+//
+//            val fileName = "${appName}-${versionName}-${buildType}-${flavorName}-${date}.apk"
+//            if (baseVariantOutput != null) {
+//                baseVariantOutput.outputFile.name.format(fileName)
+//            }
+//            return@android
+//        }
+//    }
+
     archivesName = "Mission-v${defaultConfig.versionName}-${formatDateToYYYYDDMM(Date())}"
+//    val archivesName: String by lazy {
+//        val versionName = "1.0" // 이 값을 BuildConfig.VERSION_NAME로 설정해도 됩니다.
+//        val buildType = if (BuildConfig.DEBUG) "debug" else "release"
+//        "Mission-v$versionName-${formatDateToYYYYDDMM(Date())}-$buildType"
+//    }
 
 }
 
