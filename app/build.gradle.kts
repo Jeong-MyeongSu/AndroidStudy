@@ -197,6 +197,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.kotlinx.coroutines.core)
+//    implementation(kotlin("script-runtime"))
 }
 
 // apk 생성할때 나는 규칙이있다.
