@@ -1,5 +1,7 @@
 [versions]
 agp = "8.5.1"
+firebaseMlVision = "24.1.0"
+firebaseMlVisionBarcodeModel = "16.1.2"
 kotlin = "1.9.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -7,11 +9,13 @@ espressoCore = "3.6.1"
 appcompat = "1.7.0"
 kotlinxCoroutinesCore = "1.7.3"
 material = "1.12.0"
-activity = "1.9.0"
+activity = "1.9.1"
 constraintlayout = "2.1.4"
+playServicesVision = "20.1.3"
 roomRuntime = "2.6.1"
 firebaseCrashlyticsBuildtools = "3.0.2"
 workRuntimeKtx = "2.9.0"
+cameraCore = "1.3.4"
 
 
 [libraries]
@@ -19,6 +23,8 @@ workRuntimeKtx = "2.9.0"
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+firebase-ml-vision = { module = "com.google.firebase:firebase-ml-vision", version.ref = "firebaseMlVision" }
+firebase-ml-vision-barcode-model = { module = "com.google.firebase:firebase-ml-vision-barcode-model", version.ref = "firebaseMlVisionBarcodeModel" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -29,6 +35,8 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
+play-services-vision = { module = "com.google.android.gms:play-services-vision", version.ref = "playServicesVision" }
+androidx-camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

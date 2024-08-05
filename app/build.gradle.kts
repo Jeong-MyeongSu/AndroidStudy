@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.camera.core)
 //    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -101,6 +102,29 @@ dependencies {
     kapt(libs.androidx.room.compiler)
     implementation(libs.kotlinx.coroutines.core)
 //    implementation(kotlin("script-runtime"))
+
+    // CameraX core library using the camera2 implementation
+    val camerax_version = "1.4.0-beta02"
+    // The following line is optional, as the core library is included indirectly by camera-camera2
+    implementation("androidx.camera:camera-core:${camerax_version}")
+    implementation("androidx.camera:camera-camera2:${camerax_version}")
+    // If you want to additionally use the CameraX Lifecycle library
+    implementation("androidx.camera:camera-lifecycle:${camerax_version}")
+    // If you want to additionally use the CameraX VideoCapture library
+    implementation("androidx.camera:camera-video:${camerax_version}")
+    // If you want to additionally use the CameraX View class
+    implementation("androidx.camera:camera-view:${camerax_version}")
+    // If you want to additionally add CameraX ML Kit Vision Integration
+    implementation("androidx.camera:camera-mlkit-vision:${camerax_version}")
+    // If you want to additionally use the CameraX Extensions library
+    implementation("androidx.camera:camera-extensions:${camerax_version}")
+
+    //barcode mlkit
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0")
+
+
+
 }
 
 
