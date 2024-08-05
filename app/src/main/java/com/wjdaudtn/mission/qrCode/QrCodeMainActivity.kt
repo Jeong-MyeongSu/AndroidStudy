@@ -52,6 +52,12 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+
+//interface MakeQrcodeInfoListener {
+//    fun changeTxt(txt: String)
+//}
+
+
 class QrCodeMainActivity : AppCompatActivity(), BottomDialog.FinishListener {
     override fun finish() {
         super.finish()
@@ -69,6 +75,7 @@ class QrCodeMainActivity : AppCompatActivity(), BottomDialog.FinishListener {
         setContentView(binding.root)
         permission()
         camera()
+
 
         val requestGalleryLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -178,7 +185,7 @@ class QrCodeMainActivity : AppCompatActivity(), BottomDialog.FinishListener {
                 Log.d("scanBarcodeFromBitmap", "바코드 스캔 완료") //onComplete() 콜백 부분
             }
         }
-
+        
         @OptIn(ExperimentalGetImage::class)
         private fun scanBarcode(
             image: Any, // Any 타입으로 ImageProxy 또는 InputImage를 받을 수 있게 설정
