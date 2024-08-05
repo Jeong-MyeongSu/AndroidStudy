@@ -1,9 +1,11 @@
 package com.wjdaudtn.mission
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +14,7 @@ import com.wjdaudtn.mission.databinding.ItemMainStudyBinding
 import com.wjdaudtn.mission.figma.FigmaOneActivity
 import com.wjdaudtn.mission.figma.FigmaTwoActivity
 import com.wjdaudtn.mission.figma.music.MusicActivity
+import com.wjdaudtn.mission.qrCode.QrCodeMainActivity
 import com.wjdaudtn.mission.recyclerView.ViewHolderTwo
 import com.wjdaudtn.mission.todo.TodoMainActivity
 import java.text.SimpleDateFormat
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        handleIntent(intent)
     }
 
     override fun onResume() {
@@ -76,8 +80,8 @@ class MainActivity : AppCompatActivity() {
                     "JetPack, Android SDK, Firebase",
                     "QR, Barcode 촬영",
                     "QR 이나 Barcode 를 촬영 하여 데이터 확인.",
-                    "2024-07-25",
-                    null,
+                    "2024-07-29",
+                    QrCodeMainActivity::class.java
                 )
             )
         )
@@ -164,6 +168,16 @@ class MainActivity : AppCompatActivity() {
                 -1 // Parsing error
             }
         }
+    }
 
+    //com.wjdaudtntn.mission://open 뒤 쿼리문 message(키)=Welcome!(데이터)가 intent로 들어온다.
+    private fun handleIntent(intent:Intent){
+        val data: Uri? = intent.data
+        data?.let{
+            val toastMessage = it.getQueryParameter("message")
+            toastMessage?.let{ message ->
+                Toast.makeText(application,message, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }

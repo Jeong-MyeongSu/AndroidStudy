@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -44,7 +45,8 @@ class TodoMainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {    //TodoMainActivity 생명 주기 시작
         super.onCreate(savedInstanceState)  // TodoMainActivity 기본 초기화 작업 수행, 액티 비티 상태 복원 하여 ui 초기화 작업을 수행 하기 위해 필수로 호출 해야함
-        binding = ActivityTodoMainBinding.inflate(layoutInflater)   // activity_todo_main.xml 뷰 객체 초기화
+        binding =
+            ActivityTodoMainBinding.inflate(layoutInflater)   // activity_todo_main.xml 뷰 객체 초기화
         setContentView(binding.root)    // 뷰 객채를 띄움
 
         // database 빌드 및 DAO 초기화
@@ -52,7 +54,10 @@ class TodoMainActivity : AppCompatActivity() {
 
         // Broadcast 수신기
         LocalBroadcastManager.getInstance(applicationContext) // LocalBrodcastManager 인스턴스를 가져옴
-            .registerReceiver(alarmReceiver, IntentFilter(ALARM_RECEIVER_ACTION)) // alarmReceiver를 alarm_reciver_action을 가진 인탠트를 수신하도록 등록
+            .registerReceiver(
+                alarmReceiver,
+                IntentFilter(ALARM_RECEIVER_ACTION)
+            ) // alarmReceiver를 alarm_reciver_action을 가진 인탠트를 수신하도록 등록
 
 
     }
@@ -69,6 +74,7 @@ class TodoMainActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -99,7 +105,7 @@ class TodoMainActivity : AppCompatActivity() {
             // database 에 Todo 객체 update
             dbInstance.setUpdateTodo(todo)
             mAdapter.updateItem(todo)
-            Log.d(tag,"알람 세팅1")
+            Log.d(tag, "알람 세팅1")
             alarmAsk(todo, alarmSwitch, millisecond)
 
         } else {
@@ -184,7 +190,7 @@ class TodoMainActivity : AppCompatActivity() {
             val remainingTimeString = "남은 시간: ${days}일 ${hours}시간 ${minutes}분 ${seconds}초"
             Toast.makeText(baseContext, remainingTimeString, Toast.LENGTH_SHORT)
                 .show()
-            Log.d(tag,"알랑 세팅됨1")
+            Log.d(tag, "알랑 세팅됨1")
             setAlarm(todo)
         }
     }
@@ -206,7 +212,7 @@ class TodoMainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance().apply {
             timeInMillis = todo.millisecond
         }
-        Log.d(tag,"알람 생성1")
+        Log.d(tag, "알람 생성1")
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
     }
 
