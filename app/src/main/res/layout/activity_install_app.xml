@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".installApp.InstallAppActivity">
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/install_app_tool_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+  <LinearLayout
+    android:id="@+id/layout_btn_space"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal">
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/btn_install_app_1"
+      android:text="btn1"
+      android:layout_marginEnd="16dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/btn_install_app_2"
+      android:text="btn2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"/>
+  </LinearLayout>
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recyclerView_install_app"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="16dp"
+    android:paddingBottom="16dp"/>
+
+</LinearLayout>

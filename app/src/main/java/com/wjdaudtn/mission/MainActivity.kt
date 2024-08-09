@@ -14,6 +14,7 @@ import com.wjdaudtn.mission.databinding.ItemMainStudyBinding
 import com.wjdaudtn.mission.figma.FigmaOneActivity
 import com.wjdaudtn.mission.figma.FigmaTwoActivity
 import com.wjdaudtn.mission.figma.music.MusicActivity
+import com.wjdaudtn.mission.installApp.InstallAppActivity
 import com.wjdaudtn.mission.qrCode.QrCodeMainActivity
 import com.wjdaudtn.mission.recyclerView.ViewHolderTwo
 import com.wjdaudtn.mission.todo.TodoMainActivity
@@ -77,11 +78,18 @@ class MainActivity : AppCompatActivity() {
                     FigmaTwoActivity::class.java
                 ),
                 Study(
-                    "JetPack, Android SDK, Firebase",
+                    "JetPack, Android SDK",
                     "QR, Barcode 촬영",
                     "QR 이나 Barcode 를 촬영 하여 데이터 확인.",
                     "2024-07-29",
                     QrCodeMainActivity::class.java
+                ),
+                Study(
+                    "JetPack, Android SDK",
+                    "설치된 어플 목록",
+                    "설치된 어플 목록 조회, 카테고리 구분, 디자인 적용",
+                    "2024-08-07",
+                    InstallAppActivity::class.java
                 )
             )
         )

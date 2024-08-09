@@ -5,7 +5,14 @@
   <uses-feature
     android:name="android.hardware.camera"
     android:required="false" />
+
   <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+  <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    tools:ignore="QueryAllPackagesPermission" />
 
   <application
     android:allowBackup="false"
@@ -17,6 +24,18 @@
     android:supportsRtl="true"
     android:theme="@style/Theme.Mission"
     tools:targetApi="31">
+<!--    <service android:name=".installApp.MyNotificationListener"-->
+<!--      android:exported="true"-->
+<!--      android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">-->
+<!--      <intent-filter>-->
+<!--        <action android:name="android.service.notification.NotificationListenerService" />-->
+<!--      </intent-filter>-->
+<!--    </service>-->
+    <activity
+      android:name=".installApp.InstallAppActivity"
+      android:exported="false"
+      android:parentActivityName=".MainActivity" />
+
     <meta-data
       android:name="com.google.mlkit.vision.DEPENDENCIES"
       android:value="barcode" />
@@ -33,18 +52,15 @@
       android:name=".figma.FigmaOneActivity"
       android:exported="false"
       android:parentActivityName=".MainActivity" />
-
     <activity
       android:name=".todo.AddActivity"
       android:exported="false"
       android:parentActivityName=".todo.TodoMainActivity" />
-
     <activity
       android:name=".todo.TodoMainActivity"
       android:exported="true"
       android:parentActivityName=".MainActivity">
       <intent-filter>
-
         <action android:name="android.intent.action.VIEW" />
 
         <category android:name="android.intent.category.DEFAULT" />
@@ -69,10 +85,10 @@
       android:launchMode="singleTask">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
+
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
       <intent-filter>
-
         <action android:name="android.intent.action.VIEW" />
 
         <category android:name="android.intent.category.DEFAULT" />
@@ -89,10 +105,5 @@
       android:enabled="true"
       android:exported="false" />
   </application>
-
-  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-  <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
-  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 </manifest>

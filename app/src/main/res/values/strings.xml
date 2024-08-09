@@ -47,9 +47,7 @@
     <string name="dreams">Dreams</string>
     <string name="yesterday">Yesterday</string>
     <string name="moonlightdrive">Moonlightdrive</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="part_one">Part One</string>
     <string name="part_two">Part Two</string>
-
+  <string name="icon">Icon</string>
 </resources>

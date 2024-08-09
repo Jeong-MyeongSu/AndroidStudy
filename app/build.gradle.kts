@@ -101,7 +101,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.kotlinx.coroutines.core)
-//    implementation(kotlin("script-runtime"))
+    implementation(kotlin("script-runtime"))
 
     // CameraX core library using the camera2 implementation
     val camerax_version = "1.4.0-beta02"
