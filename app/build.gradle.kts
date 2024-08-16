@@ -25,8 +25,19 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.2"
+        multiDexEnabled = true //이 앱이 참조하는 라이브러리의 메서드가 65,536개를 초과할 때 발생하는 빌드 오류에 대처 할 수있다.
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
+//        ndk {
+//            abiFilters.clear()
+//            abiFilters += setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+//
+//        }
+            ndk {
+            abiFilters.add("arm64-v8a")
+            abiFilters.add("armeabi-v7a")
+            abiFilters.add("x86")
+            abiFilters.add("x86_64")
+        }
 //        setProperty(
 //            "archivesBaseName",
 //            "Mission-v$versionCode($versionName)-${formatDateToYYYYDDMM(Date())}"
@@ -60,10 +71,12 @@ android {
         create("demo") {
             dimension = "service"
             applicationIdSuffix = ".demo"
+            manifestPlaceholders["appLabel"] = "미션(demo)"
         }
         create("production") {
             dimension = "service"
             applicationIdSuffix = ".production"
+            manifestPlaceholders["appLabel"] = "미션(prod)"
         }
     }
 
@@ -123,8 +136,11 @@ dependencies {
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
     implementation("com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0")
 
+    implementation("com.google.android.gms:play-services-maps:19.0.0") // 구글 지도와 위치 제공자를 지정 할 수있는 Fused Location Provider를 사용 하기위한 라이브러리
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
-
+    implementation("com.naver.maps:map-sdk:3.19.1")
+    implementation("com.kakao.maps.open:android:2.11.9")
 }
 
 

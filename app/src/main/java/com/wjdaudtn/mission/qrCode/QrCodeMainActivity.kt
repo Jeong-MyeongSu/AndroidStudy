@@ -1,7 +1,6 @@
 package com.wjdaudtn.mission.qrCode
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -21,7 +20,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -181,7 +179,7 @@ abstract class MyAnalysis:ImageAnalysis.Analyzer{
     abstract fun bottomDialogDisplayed(url:String)
 }
 
-class QrCodeMainActivity : AppCompatActivity(), BottomDialog.FinishListener {
+class QrCodeMainActivity : AppCompatActivity(), QrcodeBottomDialog.FinishListener {
     override fun finish() {
         super.finish()
     }
@@ -191,7 +189,7 @@ class QrCodeMainActivity : AppCompatActivity(), BottomDialog.FinishListener {
     private lateinit var camera: MyCamera //카메라
     private lateinit var _analysis: MyAnalysis  // 이미지 분석기
 
-    private lateinit var db: BottomDialog // 바텀 다이어로그
+    private lateinit var db: QrcodeBottomDialog // 바텀 다이어로그
 
     @SuppressLint("IntentReset")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -202,8 +200,8 @@ class QrCodeMainActivity : AppCompatActivity(), BottomDialog.FinishListener {
         _analysis = object :MyAnalysis(){
             override fun bottomDialogDisplayed(url: String) {
                 if (!::db.isInitialized || !db.isAdded) {
-                    db = BottomDialog()
-                    db.show(supportFragmentManager, "BottomDialog")
+                    db = QrcodeBottomDialog()
+                    db.show(supportFragmentManager, "QrcodeBottomDialog")
                     isDialogDisplayed = true // 다이어로그가 표시된 상태로 설정
                     db.dismissListener = {
                         isDialogDisplayed = false // 다이어로그가 닫히면 상태 변경
@@ -307,7 +305,7 @@ class QrCodeMainActivity : AppCompatActivity(), BottomDialog.FinishListener {
 }
 
 
-class BottomDialog : BottomSheetDialogFragment() {
+class QrcodeBottomDialog : BottomSheetDialogFragment() {
 
     interface FinishListener {
         fun finish()

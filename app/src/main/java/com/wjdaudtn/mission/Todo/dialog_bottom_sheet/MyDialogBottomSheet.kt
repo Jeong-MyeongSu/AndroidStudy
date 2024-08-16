@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wjdaudtn.mission.R
-import com.wjdaudtn.mission.databinding.FragmentMyDialogBottomSheetBinding
+import com.wjdaudtn.mission.databinding.FragmentTodoDialogBottomSheetBinding
 import com.wjdaudtn.mission.todo.AddActivity
 import com.wjdaudtn.mission.todo.DataBaseInit
 import com.wjdaudtn.mission.todo.TodoMainActivity
@@ -17,7 +17,7 @@ import com.wjdaudtn.mission.todo.util.Const.Companion.RESULT_KEY_ID
 
 
 class MyDialogBottomSheet : BottomSheetDialogFragment() {
-    private var _binding: FragmentMyDialogBottomSheetBinding? = null
+    private var _binding: FragmentTodoDialogBottomSheetBinding? = null
     private val binding get() = _binding!!
 
     private var todoItemId: Int = 0
@@ -54,7 +54,7 @@ class MyDialogBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMyDialogBottomSheetBinding.inflate(inflater, container, false)
+        _binding = FragmentTodoDialogBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
     }
 

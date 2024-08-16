@@ -1,8 +1,12 @@
 package com.wjdaudtn.mission
 
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -14,10 +18,13 @@ import com.wjdaudtn.mission.databinding.ItemMainStudyBinding
 import com.wjdaudtn.mission.figma.FigmaOneActivity
 import com.wjdaudtn.mission.figma.FigmaTwoActivity
 import com.wjdaudtn.mission.figma.music.MusicActivity
+import com.wjdaudtn.mission.googlemap.GoogleMapMainActivity
 import com.wjdaudtn.mission.installApp.InstallAppActivity
 import com.wjdaudtn.mission.qrCode.QrCodeMainActivity
 import com.wjdaudtn.mission.recyclerView.ViewHolderTwo
 import com.wjdaudtn.mission.todo.TodoMainActivity
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -30,6 +37,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         handleIntent(intent)
+        // 해시 값을 얻고 로그로 출력합니다.
+        val keyHash = getKeyHash()
+        Log.d("My Key Hash", keyHash)
     }
 
     override fun onResume() {
@@ -90,6 +100,13 @@ class MainActivity : AppCompatActivity() {
                     "설치된 어플 목록 조회, 카테고리 구분, 디자인 적용",
                     "2024-08-07",
                     InstallAppActivity::class.java
+                ),
+                Study(
+                    "JetPack, Android SDK",
+                    "Google Map",
+                    "Google Map 사용",
+                    "2024-08-09",
+                    GoogleMapMainActivity::class.java
                 )
             )
         )
@@ -186,6 +203,24 @@ class MainActivity : AppCompatActivity() {
             toastMessage?.let{ message ->
                 Toast.makeText(application,message, Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun getKeyHash(): String {
+        return try {
+            val packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            for (signature in packageInfo.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                return Base64.encodeToString(md.digest(), Base64.NO_WRAP)
+            }
+            "KeyHash not found"
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.e("KeyHash", "Package name not found", e)
+            "KeyHash not found"
+        } catch (e: NoSuchAlgorithmException) {
+            Log.e("KeyHash", "SHA algorithm not found", e)
+            "KeyHash not found"
         }
     }
 }

@@ -23,5 +23,6 @@ class Const {
         const val TIME_IS_OVER = "시간이 지났 습니다."
         const val SAVE_NULL_TEXT_TOAST = "제목과 내용을 입력 하세요"
         const val TODO_ID = "TODO_ID"
+        const val KAKAO_API_KEY = "ec42570d5cf83783b30a24d34a4f3c3a"
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/bottom_sheet_google_map"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="#4D8DDB">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="Google Map 위치"
+      android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+  </RelativeLayout>
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#9EC2EF"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recycler_lat_lng"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+  </RelativeLayout>
+</LinearLayout>
