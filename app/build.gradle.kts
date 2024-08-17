@@ -1,7 +1,6 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import java.text.SimpleDateFormat
 import java.util.Date
-import org.gradle.api.tasks.Exec
-import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 fun formatDateToYYYYDDMM(date: Date): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd")
@@ -27,24 +26,29 @@ android {
         versionName = "1.2"
         multiDexEnabled = true //이 앱이 참조하는 라이브러리의 메서드가 65,536개를 초과할 때 발생하는 빌드 오류에 대처 할 수있다.
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters.add("x86")
+            abiFilters.add("x86_64")
+            abiFilters.add("arm64-v8a")
+            abiFilters.add("armeabi-v7a")
+        }
+
+
 //        ndk {
 //            abiFilters.clear()
 //            abiFilters += setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
 //
 //        }
-            ndk {
-            abiFilters.add("arm64-v8a")
-            abiFilters.add("armeabi-v7a")
-            abiFilters.add("x86")
-            abiFilters.add("x86_64")
-        }
 //        setProperty(
 //            "archivesBaseName",
 //            "Mission-v$versionCode($versionName)-${formatDateToYYYYDDMM(Date())}"
 //        )
     }
 
-    archivesName = "Mission-v${defaultConfig.versionCode}(${defaultConfig.versionName})-${formatDateToYYYYDDMM(Date())}"
+    archivesName = "Mission-v${defaultConfig.versionCode}(${defaultConfig.versionName})-${
+        formatDateToYYYYDDMM(Date())
+    }"
 
     signingConfigs {
         create("release") {
@@ -146,7 +150,11 @@ dependencies {
 
 // Git 태그 추가를 위한 Exec 태스크
 tasks.register<Exec>("tagGit") {
-    commandLine("git", "tag", "v${android.defaultConfig.versionName}_${formatDateToYYYYDDMM(Date())}")
+    commandLine(
+        "git",
+        "tag",
+        "v${android.defaultConfig.versionName}_${formatDateToYYYYDDMM(Date())}"
+    )
 }
 
 // 빌드 후 태그 추가

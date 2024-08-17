@@ -89,7 +89,7 @@ abstract class Map(
     abstract fun clickMap() //맵 클릭 함수
     abstract fun zoom(zm: Double) //줌 함수
 
-    protected fun bottomButton(lat: Double, lng: Double){
+    protected fun bottomButton(lat: Double, lng: Double) {
         val fragmentManager = activity.supportFragmentManager
         val existingFragment = fragmentManager.findFragmentByTag("googleMapDialog")
 
@@ -102,8 +102,9 @@ abstract class Map(
     }
 
     @SuppressLint("MissingPermission")
-    protected fun startMap(){
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity) // 위치 받을 객체 초기화
+    protected fun startMap() {
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(activity) // 위치 받을 객체 초기화
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? -> //위치 받았을 때 리스너 location 현위치
             if (location != null) {
                 currentLatitude = location.latitude
@@ -127,7 +128,7 @@ class NaverMap(
     bottomSheetButton: ButtonBottomDialog
 ) : Map(minSize, maxSize, activity, bottomSheetButton), com.naver.maps.map.OnMapReadyCallback {
 
-//    private lateinit var fusedLocationClient: FusedLocationProviderClient //현재 위치 받기 위한 객체
+    //    private lateinit var fusedLocationClient: FusedLocationProviderClient //현재 위치 받기 위한 객체
     private var mNaverMap: NaverMap? = null //생명주기에 쓰일 네이버 맵 객체
     private var clickMarker: com.naver.maps.map.overlay.Marker? = null
 
@@ -140,7 +141,8 @@ class NaverMap(
     }
 
     override fun firstMapLocation() {
-        val latLng = com.naver.maps.geometry.LatLng(currentLatitude, currentLongitude) //카메라 업데이트를 위한 위도경도 객체
+        val latLng =
+            com.naver.maps.geometry.LatLng(currentLatitude, currentLongitude) //카메라 업데이트를 위한 위도경도 객체
         val cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, 15.0) //현 위치와 줌 상태 업데이트
         mNaverMap?.moveCamera(cameraUpdate) //카메라 이동
 
@@ -154,7 +156,7 @@ class NaverMap(
         mNaverMap!!.setOnMapClickListener { pointF, latLng ->
             val clickedLatitude = latLng.latitude //클릭 위도 초기화
             val clickedLongitude = latLng.longitude //클릭 경도 초기화
-            clickMarker?.map = null //마커 있으면 없앰
+//            clickMarker?.map = null //마커 있으면 없앰
             clickMarker = com.naver.maps.map.overlay.Marker() //마커 생성
             clickMarker?.position = latLng //마커 위치
             clickMarker?.iconTintColor = Color.RED //마커 색
@@ -176,10 +178,10 @@ class GoogleMap(
     maxSize: Double,
     activity: GoogleMapMainActivity,
     bottomSheetButton: ButtonBottomDialog
-) : Map(minSize, maxSize, activity, bottomSheetButton),GoogleApiClient.ConnectionCallbacks,
-    GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback{
+) : Map(minSize, maxSize, activity, bottomSheetButton), GoogleApiClient.ConnectionCallbacks,
+    GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
 
-//    private lateinit var providerClient: FusedLocationProviderClient // 위치 불러 오기 위한 객체 생성
+    //    private lateinit var providerClient: FusedLocationProviderClient // 위치 불러 오기 위한 객체 생성
     private lateinit var apiClient: GoogleApiClient  //GoogleApiClient를 빌더 패턴 객체 생성
     private var mGoogleMap: GoogleMap? = null //구글 맵 객체 생성
     private var clickMarker: Marker? = null //마커 객체 생성
@@ -191,6 +193,7 @@ class GoogleMap(
         mGoogleMap?.setMaxZoomPreference(maxSize.toFloat()) //최대 줌 레벨 설정
         connect() //네이버랑 다른점 apiclint로 한번 연결하고 onConnected 호출
     }
+
     // GoogleApiClient가 성공적으로 연결되었을 때 호출되는 메서드
     @SuppressLint("MissingPermission")
     override fun onConnected(p0: Bundle?) {
@@ -198,11 +201,11 @@ class GoogleMap(
     }
 
     override fun onConnectionSuspended(p0: Int) {
-        Log.d("onConnectionSuspended","GoogleApiClient의 연결이 일시 중단 되었을 때 호출 되는 메서드")
+        Log.d("onConnectionSuspended", "GoogleApiClient의 연결이 일시 중단 되었을 때 호출 되는 메서드")
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
-        Log.d("onConnectionFailed","GoogleApiClient의 연결이 일시 실패 되었을 때 호출 되는 메서드")
+        Log.d("onConnectionFailed", "GoogleApiClient의 연결이 일시 실패 되었을 때 호출 되는 메서드")
     }
 
     override fun firstMapLocation() {
@@ -226,7 +229,7 @@ class GoogleMap(
             val clickedLongitude = _latLng.longitude //클릭 경도 초기화
             Log.d("clickMap", "클릭 위치: 위도 $clickedLatitude, $clickedLongitude ")
             val latLng = LatLng(clickedLatitude, clickedLongitude)
-            clickMarker?.remove() //마크가 있으면 지움
+//            clickMarker?.remove() //마크가 있으면 지움
             clickMarker = mGoogleMap?.addMarker(MarkerOptions().apply {
                 icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                 position(latLng)
@@ -244,7 +247,8 @@ class GoogleMap(
             .build()
         mGoogleMap!!.moveCamera(CameraUpdateFactory.newCameraPosition(position)) // 카메라 움직임 - 줌
     }
-    private fun connect(){
+
+    private fun connect() {
         apiClient = GoogleApiClient.Builder(activity) // GoogleApiClient를 빌더 패턴을 사용해 초기화하고 연결을 시도
             .addApi(LocationServices.API)
             .addConnectionCallbacks(this)
@@ -265,7 +269,6 @@ class GoogleMapMainActivity : AppCompatActivity(), ButtonBottomDialog.LatLngList
     private lateinit var binding: ActivityGoogleMapMainBinding //메인 엑티비티 바인딩
     private lateinit var googleMap: com.wjdaudtn.mission.googlemap.GoogleMap
     private lateinit var naverMap: com.wjdaudtn.mission.googlemap.NaverMap
-    private lateinit var kakaoMapFragment: KakaoFragment
 
     private lateinit var bottomSheetButton: ButtonBottomDialog //바텀바이어로그 버튼
     private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout> //바텀시트 객체 생성
@@ -301,12 +304,8 @@ class GoogleMapMainActivity : AppCompatActivity(), ButtonBottomDialog.LatLngList
         bottomSheetRecyclerView.layoutManager = layoutManager
         bottomSheetRecyclerView.addItemDecoration(dividerItemDecoration)
 
-
-
-        googleMap = GoogleMap(5.0,18.0,this,bottomSheetButton)
+        googleMap = GoogleMap(5.0, 18.0, this, bottomSheetButton)
         naverMap = NaverMap(5.0, 18.0, this, bottomSheetButton)
-
-        kakaoMapFragment = KakaoFragment(5, 15)
 
         val mapFragment = SupportMapFragment.newInstance()
         supportFragmentManager.beginTransaction()
@@ -327,8 +326,6 @@ class GoogleMapMainActivity : AppCompatActivity(), ButtonBottomDialog.LatLngList
         menuItem1?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         val menuItem2: MenuItem? = menu?.add(0, 1, 0, "네이버")
         menuItem2?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        val menuItem3: MenuItem? = menu?.add(0, 2, 0, "카카오")
-        menuItem3?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
 
 //        val menuItemBindingGoogle = GoogleImageBinding.inflate(layoutInflater)
 //        val menuItemBindingNaver = NaverImageBinding.inflate(layoutInflater)
@@ -356,13 +353,6 @@ class GoogleMapMainActivity : AppCompatActivity(), ButtonBottomDialog.LatLngList
                     .replace(R.id.mapView, naverMapFragment)
                     .commit()
                 naverMapFragment.getMapAsync(naverMap)//// SupportMapFragment를 찾아 지도가 준비되면 콜백을 통해 알림을 받음
-                true
-            }
-
-            2 -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.mapView, kakaoMapFragment)
-                    .commit()
                 true
             }
 
