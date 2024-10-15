@@ -1,3 +1,39 @@
+# 개발환경
+android sdk 17, android gradle plugin version 8.5.0
+# 내용
+## 1. RecyclerView Sample
+여러게 뷰 홀더 샘플
+## 2. Todo
+할일 추가/수정/삭제, 알림 등록, 지정된 날짜 알림 확인
+## 3. music Palyer
+Figma Sample 따라해보고 music 리스트 플레이, Room DB, MediaPlayer 사용
+## 4. chatting app
+Figma Sample 따라해보고 채팅 앱 만들어보기 activity는 fragment로 화면 전환  Room DB 사용
+## 5. QR, Barcode 촬영
+QR코드나 Barcode를 촬영하여 데이터 확인
+## 6. 설치된 어플리케이션 목록 list
+어플리케이선 목록 조회, 카테고리 구분, 디자인 적용
+## 7. Map Sdk 사용해보기
+google map, naver map 맵 사용해보고 위치 정보 찍어보기
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### 개발 시 참고할 만한 사이트들
 
 ## 디자인 (참고용)  
