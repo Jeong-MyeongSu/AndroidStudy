@@ -31,8 +31,8 @@ class NaverMap(
     latLngList: MutableList<com.wjdaudtn.mission.googlemap.LatLng>
 ): MapAbstract(minSize, maxSize, activity, latLngList), com.naver.maps.map.OnMapReadyCallback{
     private var mNaverMap: NaverMap? = null //생명주기에 쓰일 네이버 맵 객체
-    protected var currentLatitude by Delegates.notNull<Double>() //현재 위도
-    protected var currentLongitude by Delegates.notNull<Double>() //현재 경도
+    private var currentLatitude by Delegates.notNull<Double>() //현재 위도
+    private var currentLongitude by Delegates.notNull<Double>() //현재 경도
     private var clickMarker: com.naver.maps.map.overlay.Marker? = null //마커
     private val markers: MutableList<com.naver.maps.map.overlay.Marker> = mutableListOf() // 마커들을 저장하는 리스트
     private lateinit var fusedLocationClient: FusedLocationProviderClient //현재 위치 받기 위한 객체

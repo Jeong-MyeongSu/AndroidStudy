@@ -38,8 +38,8 @@ class GoogleMap(
     latLngList: MutableList<com.wjdaudtn.mission.googlemap.LatLng>
 ): MapAbstract(minSize, maxSize, activity, latLngList), GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
-    protected var currentLatitude by Delegates.notNull<Double>() //현재 위도
-    protected var currentLongitude by Delegates.notNull<Double>() //현재 경도
+    private var currentLatitude by Delegates.notNull<Double>() //현재 위도
+    private var currentLongitude by Delegates.notNull<Double>() //현재 경도
     private lateinit var fusedLocationClient: FusedLocationProviderClient //현재 위치 받기 위한 객체
     private lateinit var apiClient: GoogleApiClient  //GoogleApiClient를 빌더 패턴 객체 생성
     private var mGoogleMap: GoogleMap? = null //구글 맵 객체 생성
